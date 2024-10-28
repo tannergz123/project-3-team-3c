@@ -22,7 +22,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Add upstream remote
-        run: git remote add upstream https://github.com/ORIGINAL_OWNER/REPO_NAME.git # Replace with the actual upstream repo
+        run: git remote add upstream https://github.com/CSCE331-Fall2024/project-3-team-3c.git 
 
       - name: Fetch upstream changes
         run: git fetch upstream
