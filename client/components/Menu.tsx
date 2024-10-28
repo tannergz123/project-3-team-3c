@@ -2,24 +2,23 @@
     "use client";
 
     import React from "react";
-    import { VStack } from "@chakra-ui/react";
     import { Grid, GridItem } from "@chakra-ui/react"
     import MenuItem from "../components/MenuItem";
 
     function Menu() {
     const pandaMenuItems = [
-        { name: "Orange Chicken", price: 7.99, description: "Tangy and spicy chicken." },
-        { name: "Kung Pao Chicken", price: 8.99, description: "Spicy stir-fried chicken." },
-        { name: "Beef Broccoli", price: 9.49, description: "Beef with fresh broccoli." },
-        { name: "Orange Chicken", price: 7.99, description: "Tangy and spicy chicken." },
-        { name: "Kung Pao Chicken", price: 8.99, description: "Spicy stir-fried chicken." },
-        { name: "Beef Broccoli", price: 9.49, description: "Beef with fresh broccoli." },
-        { name: "Orange Chicken", price: 7.99, description: "Tangy and spicy chicken." },
-        { name: "Kung Pao Chicken", price: 8.99, description: "Spicy stir-fried chicken." },
-        { name: "Beef Broccoli", price: 9.49, description: "Beef with fresh broccoli." },
-        { name: "Orange Chicken", price: 7.99, description: "Tangy and spicy chicken." },
-        { name: "Kung Pao Chicken", price: 8.99, description: "Spicy stir-fried chicken." },
-        { name: "Orange Beef", price: 9.99, description: "Spicy beef with orange zest." },
+        { name: "Orange Panda", price: 7.99, description: "Tangy and spicy panda." },
+        { name: "Kung Pao Panda", price: 8.99, description: "Spicy stir-fried panda." },
+        { name: "Panda Broccoli", price: 9.49, description: "Panda with fresh broccoli." },
+        { name: "Sweet Sesame Panda", price: 8.99, description: "Panda in a sweet sesame glaze." },
+        { name: "Spicy Garlic Panda", price: 8.99, description: "Panda with a spicy garlic kick." },
+        { name: "Panda Delight", price: 9.99, description: "Classic panda bites with veggies." },
+        { name: "Honey Glazed Panda", price: 7.99, description: "Panda bites with honey glaze." },
+        { name: "Teriyaki Panda", price: 8.99, description: "Panda in rich teriyaki sauce." },
+        { name: "Panda Dumplings", price: 9.49, description: "Steamed dumplings with panda filling." },
+        { name: "Orange Panda Stir-Fry", price: 7.99, description: "Tangy panda in a stir-fry." },
+        { name: "Panda Lettuce Wraps", price: 8.99, description: "Fresh lettuce wraps with panda." },
+        { name: "Zesty Panda Bites", price: 9.99, description: "Panda bites with a zesty finish." },
     ];
 
     return (
