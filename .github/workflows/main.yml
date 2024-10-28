@@ -1,0 +1,42 @@
+name: Sync with Upstream
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Runs every 15 minutes; adjust as needed
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set up Git config
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/CSCE331-Fall2024/project-3-team-3c.git
+
+      - name: Fetch upstream changes
+        run: git fetch upstream
+
+      - name: Check if there are changes
+        id: check_changes
+        run: |
+          git diff --exit-code upstream/main || echo "Changes detected" > has_changes.txt
+
+      - name: Merge changes from upstream/main
+        if: success() && steps.check_changes.outputs.changes == 'true'
+        run: git merge upstream/main --allow-unrelated-histories
+
+      - name: Push changes to origin
+        if: success() && steps.check_changes.outputs.changes == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: git push origin main
