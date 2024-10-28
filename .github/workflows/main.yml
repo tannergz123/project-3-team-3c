@@ -13,6 +13,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v2
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # Use GitHub token for authentication
           persist-credentials: false
           fetch-depth: 0
 
@@ -22,7 +23,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Add upstream remote
-        run: git remote add upstream https://github.com/CSCE331-Fall2024/project-3-team-3c.git 
+        run: git remote add upstream https://github.com/ORIGINAL_OWNER/REPO_NAME.git # Replace with actual upstream URL
 
       - name: Fetch upstream changes
         run: git fetch upstream
@@ -38,6 +39,6 @@ jobs:
 
       - name: Push changes to origin
         if: steps.check_changes.outputs.changes == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: git push "https://${GITHUB_TOKEN}@github.com/tannergz123/project-3-team-3c.git" main
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/tannergz123/project-3-team-3c.git
+          git push origin main
