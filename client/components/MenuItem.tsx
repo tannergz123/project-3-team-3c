@@ -34,13 +34,13 @@ const MenuItem: React.FC<MenuItemProps> = ({ name, price, description, onAddToOr
         )}
 
         {/* Price */}
-        <Text fontSize="lg" color="teal.500">
+        <Text fontSize="lg" color="orange.500">
           ${price.toFixed(2)}
         </Text>
 
         {/* Button to add to order */}
         <Button 
-          colorScheme="teal" 
+          colorScheme="orange" 
           variant="solid" 
           onClick={onAddToOrder}
         >
