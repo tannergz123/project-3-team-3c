@@ -2,7 +2,6 @@ import {
   Box,
 } from "@chakra-ui/react"
 import Image from "next/image"
-import { AbsoluteCenter } from "@chakra-ui/react"
 import Menu from "../components/Menu"
 
 export default async function Page() {
