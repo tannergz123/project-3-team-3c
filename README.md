@@ -13,3 +13,7 @@ Install node to use npm
 3. cd client
 4. npm install
 5. npm run dev
+
+How to create hello world flask
+
+https://linuxize.com/post/how-to-install-flask-on-ubuntu-20-04/
