@@ -1,4 +1,4 @@
-import { Box, Table, Tbody, Tr, Td, Text, Heading } from '@chakra-ui/react';
+import { Box, Table, Tbody, Tr, Td, Heading } from '@chakra-ui/react';
 
 const EmployeeManagement = () => {
   const employees = [
