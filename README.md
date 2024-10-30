@@ -11,7 +11,7 @@ How to create hello world flask
 https://linuxize.com/post/how-to-install-flask-on-ubuntu-20-04/
 
 ## Backend Organization and Overview
-'''
+```
 project-3-team-3c/  
 │  
 ├── backend/  
@@ -29,4 +29,4 @@ project-3-team-3c/
 │       └── settings.py  
 ├── .env                     # Environment variables  
 └── app.py                # Entry point to run the app  
-'''
+```
