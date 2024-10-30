@@ -3,7 +3,7 @@
 
     import React from "react";
     import { Grid, GridItem } from "@chakra-ui/react"
-    import MenuItem from "../components/MenuItem";
+    import MenuItem from "./MenuItem";
 
     function Menu() {
     const pandaMenuItems = [
@@ -22,11 +22,10 @@
     ];
 
     return (
-        <Grid templateColumns="repeat(4, 1fr)" gap="6" paddingLeft={20}>
+        <Grid templateColumns="repeat(3, 1fr)" gap="6" paddingLeft={20}>
         {pandaMenuItems.map((item, index) => (
-            <GridItem>
+            <GridItem key={index}>
                 <MenuItem
-                    key={index}
                     name={item.name}
                     price={item.price}
                     description={item.description}
