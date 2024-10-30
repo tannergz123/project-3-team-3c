@@ -7,18 +7,18 @@
 
     function Menu() {
     const pandaMenuItems = [
-        { name: "Orange Panda", price: 7.99, description: "Tangy and spicy panda." },
-        { name: "Kung Pao Panda", price: 8.99, description: "Spicy stir-fried panda." },
-        { name: "Panda Broccoli", price: 9.49, description: "Panda with fresh broccoli." },
-        { name: "Sweet Sesame Panda", price: 8.99, description: "Panda in a sweet sesame glaze." },
-        { name: "Spicy Garlic Panda", price: 8.99, description: "Panda with a spicy garlic kick." },
-        { name: "Panda Delight", price: 9.99, description: "Classic panda bites with veggies." },
-        { name: "Honey Glazed Panda", price: 7.99, description: "Panda bites with honey glaze." },
-        { name: "Teriyaki Panda", price: 8.99, description: "Panda in rich teriyaki sauce." },
-        { name: "Panda Dumplings", price: 9.49, description: "Steamed dumplings with panda filling." },
-        { name: "Orange Panda Stir-Fry", price: 7.99, description: "Tangy panda in a stir-fry." },
-        { name: "Panda Lettuce Wraps", price: 8.99, description: "Fresh lettuce wraps with panda." },
-        { name: "Zesty Panda Bites", price: 9.99, description: "Panda bites with a zesty finish." },
+        { name: "Orange Chicken", price: 7.99, description: "Crispy chicken bites tossed in a sweet and tangy orange sauce." },
+        { name: "Kung Pao Chicken", price: 8.99, description: "Spicy stir-fried chicken with peanuts, vegetables, and chili peppers." },
+        { name: "Beijing Beef", price: 9.49, description: "Crispy beef tossed in a sweet-tangy sauce with peppers and onions." },
+        { name: "Sweet Fire Chicken", price: 8.99, description: "Chicken breast in a sweet chili sauce with pineapples and peppers." },
+        { name: "Grilled Teriyaki Chicken", price: 8.99, description: "Juicy grilled chicken thigh in a savory teriyaki sauce." },
+        { name: "Honey Walnut Shrimp", price: 9.99, description: "Crispy shrimp tossed in a honey sauce with glazed walnuts." },
+        { name: "Broccoli Beef", price: 7.99, description: "Tender beef with fresh broccoli in a savory ginger soy sauce." },
+        { name: "Chow Mein", price: 6.99, description: "Stir-fried noodles with onions, celery, and cabbage." },
+        { name: "Fried Rice", price: 6.99, description: "Classic fried rice with peas, carrots, and scrambled eggs." },
+        { name: "Vegetable Spring Rolls", price: 3.99, description: "Crispy spring rolls filled with cabbage, carrots, and green onions." },
+        { name: "Eggplant Tofu", price: 7.99, description: "Stir-fried tofu with eggplant, red bell peppers, and a sweet-spicy sauce." },
+        { name: "Black Pepper Chicken", price: 8.99, description: "Diced chicken and vegetables in a bold black pepper sauce." },
     ];
 
     return (
