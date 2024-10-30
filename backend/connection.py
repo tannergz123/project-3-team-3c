@@ -1,12 +1,19 @@
+from backend.config.settings import Config
 import psycopg2
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
+# Print debug information to confirm variables are loaded
+print("Database credentials loaded:")
+print(f"DB Name: {Config.DB_NAME}, DB User: {Config.DB_USER_NAME}, DB Host: {Config.DB_HOST_NAME}")
 
-conn = psycopg2.connect(database = os.getenv('DB_NAME'), 
-                        user = os.getenv("DB_USER_NAME"), 
-                        host= os.getenv("DB_HOST_NAME"),
-                        password = os.getenv("DB_PASSWORD"),
-                        port = 5432)
-
+# Establish the database connection
+try:
+    conn = psycopg2.connect(
+        dbname= Config.DB_NAME,
+        user= Config.DB_USER_NAME,
+        password= Config.DB_PASSWORD,
+        host= Config.DB_HOST_NAME,
+        port= 5432
+    )
+    print("Database connection successful")
+except Exception as e:
+    print("Error connecting to database:", e)
