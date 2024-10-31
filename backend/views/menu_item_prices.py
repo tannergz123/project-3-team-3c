@@ -42,6 +42,13 @@ def get_menu_item_prices():
 
 @menu_item_prices.route("/update-menu-item-prices", methods=['PUT'])
 def update_menu_item_prices():
+    """
+    Updates menu_item_prices by changing the price of an existing menu_item
+
+    Parameters:
+    menu_item : the menu item whose price needs to be modified
+    price : the new price that you want to set the menu item to
+    """
     try:
         # Extract parameters from query arguments
         menu_item = request.args.get('menu_item')
