@@ -1,79 +1,42 @@
-"use client";
+import React from "react";
+import { Box, Text, VStack } from "@chakra-ui/react";
+import { OrderItem } from "../../Types/orderTypes";
 
-import { useState } from "react";
-import { Box, Button, Text, HStack, VStack, Heading } from "@chakra-ui/react";
+interface OrderDisplayProps {
+  order: OrderItem[];
+  onRemoveFromOrder: (itemName: string) => void;
+}
 
-type OrderItem = {
-  id: number;
-  name: string;
-  quantity: number;
-};
-
-const OrderDisplay: React.FC = () => {
-  const [orderItems, setOrderItems] = useState<OrderItem[]>([
-    { id: 1, name: "Orange Chicken", quantity: 1 },
-    { id: 2, name: "Kung Pao Chicken", quantity: 2 },
-  ]);
-
-  const addItem = (id: number) => {
-    setOrderItems((items) =>
-      items.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
-  };
-
-  const subtractItem = (id: number) => {
-    setOrderItems((items) =>
-      items.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
-  };
+const OrderDisplay: React.FC<OrderDisplayProps> = ({ order }) => {
+  // Debugging log to see if order data is received
+  console.log("OrderDisplay Props:", order);
 
   return (
-    <Box
-      p={5}
-      shadow="md"
-      borderWidth="1px"
-      borderRadius="md"
-      width="100%"
-      maxW="400px"
-      mx="auto"
-      my="4"
-    >
-      <Heading as="h3" size="lg" mb={4} textAlign="center">
-        Current Order
-      </Heading>
-      <VStack spacing={4} align="stretch">
-        {orderItems.map((item) => (
-          <Box key={item.id} p={3} borderWidth="1px" borderRadius="md">
-            <HStack justify="space-between">
-              <Text fontWeight="bold">{item.name}</Text>
-              <HStack>
-                <Button
-                  size="sm"
-                  colorScheme="red"
-                  onClick={() => subtractItem(item.id)}
-                >
-                  -
-                </Button>
-                <Text>{item.quantity}</Text>
-                <Button
-                  size="sm"
-                  colorScheme="teal"
-                  onClick={() => addItem(item.id)}
-                >
-                  +
-                </Button>
-              </HStack>
-            </HStack>
+    <VStack spacing={4} align="stretch">
+      {order.length === 0 ? (
+        <Text>No items in the order.</Text>
+      ) : (
+        order.map((item, index) => (
+          <Box key={index} borderWidth="1px" borderRadius="lg" p={4}>
+            <Text fontWeight="bold">
+              {item.name} x{item.quantity}
+            </Text>
+            <Box pl={4}>
+              {item.entrees &&
+                item.entrees.map((entree) => (
+                  <Text key={entree.name}>
+                    - {entree.name} x{entree.quantity}
+                  </Text>
+                ))}
+              {item.sides &&
+                item.sides.map((side, i) => (
+                  <Text key={i}>- {side}</Text>
+                ))}
+            </Box>
           </Box>
-        ))}
-      </VStack>
-    </Box>
+        ))
+      )}
+    </VStack>
   );
 };
 
