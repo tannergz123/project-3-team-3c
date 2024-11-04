@@ -6,10 +6,6 @@ Kane
 Ashwin
 ## Getting Started
 
-How to create hello world flask
-
-https://linuxize.com/post/how-to-install-flask-on-ubuntu-20-04/
-
 ## Backend Organization and Overview
 ```
 project-3-team-3c/  
