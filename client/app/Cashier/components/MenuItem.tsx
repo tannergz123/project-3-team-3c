@@ -2,15 +2,13 @@
 import React from "react";
 import { Box, Text, Button, VStack } from "@chakra-ui/react";
 
-// Define the props type for MenuItem
 interface MenuItemProps {
   name: string;
-  price: number;
-  description?: string;
+  itemType: string;
   onAddToOrder: () => void;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ name, price, description, onAddToOrder }) => {
+const MenuItem: React.FC<MenuItemProps> = ({ name, itemType, onAddToOrder }) => {
   return (
     <Box 
       borderWidth="1px" 
@@ -25,23 +23,12 @@ const MenuItem: React.FC<MenuItemProps> = ({ name, price, description, onAddToOr
         <Text fontSize="xl" fontWeight="bold">
           {name}
         </Text>
-
-        {/* Description */}
-        {description && (
-          <Text fontSize="md" color="gray.500">
-            {description}
-          </Text>
-        )}
-
-        {/* Price */}
-        <Text fontSize="lg" color="orange.500">
-          ${price.toFixed(2)}
-        </Text>
-
         {/* Button to add to order */}
-        <Button 
-          colorScheme="orange" 
-          variant="solid" 
+        <Button
+          colorScheme="red"
+          bg="pandaRed"
+          color="white"
+          _hover={{ bg: "pandaBrown" }}
           onClick={onAddToOrder}
         >
           Add to Order
