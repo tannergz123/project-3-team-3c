@@ -1,41 +1,123 @@
-    // pages/menu.js or in any parent component
-    "use client";
+"use client";
 
-    import React from "react";
-    import { Grid, GridItem } from "@chakra-ui/react"
-    import MenuItem from "./MenuItem";
+import React from "react";
+import { Box, Grid, Heading } from "@chakra-ui/react";
+import MenuItem from "./MenuItem";
 
-    function Menu() {
-    const pandaMenuItems = [
-        { name: "Orange Chicken", price: 7.99, description: "Crispy chicken bites tossed in a sweet and tangy orange sauce." },
-        { name: "Kung Pao Chicken", price: 8.99, description: "Spicy stir-fried chicken with peanuts, vegetables, and chili peppers." },
-        { name: "Beijing Beef", price: 9.49, description: "Crispy beef tossed in a sweet-tangy sauce with peppers and onions." },
-        { name: "Sweet Fire Chicken", price: 8.99, description: "Chicken breast in a sweet chili sauce with pineapples and peppers." },
-        { name: "Grilled Teriyaki Chicken", price: 8.99, description: "Juicy grilled chicken thigh in a savory teriyaki sauce." },
-        { name: "Honey Walnut Shrimp", price: 9.99, description: "Crispy shrimp tossed in a honey sauce with glazed walnuts." },
-        { name: "Broccoli Beef", price: 7.99, description: "Tender beef with fresh broccoli in a savory ginger soy sauce." },
-        { name: "Chow Mein", price: 6.99, description: "Stir-fried noodles with onions, celery, and cabbage." },
-        { name: "Fried Rice", price: 6.99, description: "Classic fried rice with peas, carrots, and scrambled eggs." },
-        { name: "Vegetable Spring Rolls", price: 3.99, description: "Crispy spring rolls filled with cabbage, carrots, and green onions." },
-        { name: "Eggplant Tofu", price: 7.99, description: "Stir-fried tofu with eggplant, red bell peppers, and a sweet-spicy sauce." },
-        { name: "Black Pepper Chicken", price: 8.99, description: "Diced chicken and vegetables in a bold black pepper sauce." },
-    ];
+interface MenuProps {
+  type: string;
+  onAddToOrder: (item: { name: string; id: number; item_type: string }) => void;
+}
 
-    return (
-        <Grid templateColumns="repeat(3, 1fr)" gap="6" paddingLeft={20}>
-        {pandaMenuItems.map((item, index) => (
-            <GridItem key={index}>
-                <MenuItem
-                    name={item.name}
-                    price={item.price}
-                    description={item.description}
-                    onAddToOrder={() => console.log(`Added ${item.name} to order`)}
-                />
-            </GridItem>
-        ))}
-        </Grid>
-        
-    );
-    }
+const menuItems = [
+  { id: 1, name: "Orange Chicken", item_type: "entree" },
+  { id: 2, name: "Kung Pao Chicken", item_type: "entree" },
+  { id: 3, name: "Beijing Beef", item_type: "entree" },
+  { id: 4, name: "Chow Mein", item_type: "side" },
+  { id: 5, name: "Fried Rice", item_type: "side" },
+  { id: 6, name: "Vegetable Spring Rolls", item_type: "appetizer" },
+  { id: 7, name: "Honey Walnut Shrimp", item_type: "entree" },
+  { id: 8, name: "Broccoli Beef", item_type: "entree" },
+  { id: 9, name: "Drink", item_type: "drink" },
+];
 
-    export default Menu;
+const Menu: React.FC<MenuProps> = ({ type, onAddToOrder }) => {
+  // Filter menu items based on the selected type
+  const filteredEntrees = menuItems.filter(
+    (item) => item.item_type === "entree" && (type === "Bowl" || type === "Plate" || type === "Bigger Plate" || type === "A La Carte")
+  );
+
+  const filteredSides = menuItems.filter(
+    (item) => item.item_type === "side" && (type === "Bowl" || type === "Plate" || type === "Bigger Plate")
+  );
+
+  const filteredAppetizers = menuItems.filter(
+    (item) => item.item_type === "appetizer" && type === "Appetizer"
+  );
+
+  const filteredDrinks = menuItems.filter(
+    (item) => item.item_type === "drink" && type === "Drink"
+  );
+
+  return (
+    <Box display="flex" flexDirection="column" gap={6}>
+      {/* Entrees Section */}
+      {filteredEntrees.length > 0 && (
+        <Box borderWidth="1px" borderRadius="lg" p={4} bg="pandaRed.50">
+          <Heading as="h3" size="md" mb={4} color="pandaRed.800">
+            Entrees
+          </Heading>
+          <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+            {filteredEntrees.map((item) => (
+              <MenuItem
+                key={item.id}
+                name={item.name}
+                itemType={item.item_type}
+                onAddToOrder={() => onAddToOrder(item)}
+              />
+            ))}
+          </Grid>
+        </Box>
+      )}
+
+      {/* Sides Section */}
+      {filteredSides.length > 0 && (
+        <Box borderWidth="1px" borderRadius="lg" p={4} bg="pandaGreen.50">
+          <Heading as="h3" size="md" mb={4} color="pandaGreen.800">
+            Sides
+          </Heading>
+          <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+            {filteredSides.map((item) => (
+              <MenuItem
+                key={item.id}
+                name={item.name}
+                itemType={item.item_type}
+                onAddToOrder={() => onAddToOrder(item)}
+              />
+            ))}
+          </Grid>
+        </Box>
+      )}
+
+      {/* Appetizers Section */}
+      {filteredAppetizers.length > 0 && (
+        <Box borderWidth="1px" borderRadius="lg" p={4} bg="pandaYellow.50">
+          <Heading as="h3" size="md" mb={4} color="pandaYellow.800">
+            Appetizers
+          </Heading>
+          <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+            {filteredAppetizers.map((item) => (
+              <MenuItem
+                key={item.id}
+                name={item.name}
+                itemType={item.item_type}
+                onAddToOrder={() => onAddToOrder(item)}
+              />
+            ))}
+          </Grid>
+        </Box>
+      )}
+
+      {/* Drinks Section */}
+      {filteredDrinks.length > 0 && (
+        <Box borderWidth="1px" borderRadius="lg" p={4} bg="pandaBrown.50">
+          <Heading as="h3" size="md" mb={4} color="pandaBrown.800">
+            Drinks
+          </Heading>
+          <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+            {filteredDrinks.map((item) => (
+              <MenuItem
+                key={item.id}
+                name={item.name}
+                itemType={item.item_type}
+                onAddToOrder={() => onAddToOrder(item)}
+              />
+            ))}
+          </Grid>
+        </Box>
+      )}
+    </Box>
+  );
+};
+
+export default Menu;

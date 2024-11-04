@@ -18,7 +18,7 @@ export default function HomePage() {
   return (
     <Box textAlign="center" py={10} px={6}>
       <Text fontSize="3xl" mb={10} fontWeight="bold">
-        Select a Page
+        Landing Page
       </Text>
       <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={6}>
         {navItems.map((item) => (
