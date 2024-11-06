@@ -3,10 +3,10 @@ import { Box, Button, HStack } from "@chakra-ui/react";
 
 interface TypeSelectorProps {
   type: string;
-  setType: (type: string) => void;
+  onTypeChange: (type: string) => void;
 }
 
-const TypeSelector: React.FC<TypeSelectorProps> = ({ type, setType }) => {
+const TypeSelector: React.FC<TypeSelectorProps> = ({ type, onTypeChange }) => {
   const types = ["Appetizer", "Bowl", "Plate", "Bigger Plate", "A La Carte", "Drink"];
 
   return (
@@ -15,7 +15,7 @@ const TypeSelector: React.FC<TypeSelectorProps> = ({ type, setType }) => {
         <Button
           key={t}
           colorScheme={t === type ? "red" : "gray"}
-          onClick={() => setType(t)}
+          onClick={() => onTypeChange(t)}
         >
           {t}
         </Button>
