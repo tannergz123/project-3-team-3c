@@ -10,30 +10,18 @@ interface MenuItemProps {
 
 const MenuItem: React.FC<MenuItemProps> = ({ name, itemType, onAddToOrder }) => {
   return (
-    <Box 
-      borderWidth="1px" 
-      borderRadius="lg" 
-      p="4" 
-      shadow="md"
-      width="250px"
-      textAlign="center"
+    <Box
     >
-      <VStack spacing="3">
-        {/* Item Name */}
-        <Text fontSize="xl" fontWeight="bold">
-          {name}
-        </Text>
-        {/* Button to add to order */}
-        <Button
-          colorScheme="red"
-          bg="pandaRed"
-          color="white"
-          _hover={{ bg: "pandaBrown" }}
-          onClick={onAddToOrder}
-        >
-          Add to Order
-        </Button>
-      </VStack>
+      <Button
+        width="100%"
+        colorScheme="red"
+        variant="outline"
+        size="sm"
+        onClick={onAddToOrder}
+      >
+        <Text fontWeight="bold">{name}</Text>
+        <Text fontSize="sm" color="gray.600" ml={2}></Text>
+      </Button>
     </Box>
   );
 };
