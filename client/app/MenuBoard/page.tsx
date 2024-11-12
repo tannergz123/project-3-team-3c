@@ -11,6 +11,7 @@ import {
   SimpleGrid,
   Divider
 } from "@chakra-ui/react";
+import BackButton from "../../components/BackButton";
 
 // Types for menu items
 type MenuItem = {
@@ -24,11 +25,14 @@ type ComboOption = {
   details: string;
 };
 
-// Combo options data
+// Menu options data
 const combos: ComboOption[] = [
   { name: "Bowl", price: 7.99, details: "Includes 1 entrée and 1 side" },
   { name: "Plate", price: 9.99, details: "Includes 2 entrées and 1 side" },
-  { name: "Bigger Plate", price: 11.99, details: "Includes 3 entrées and 1 side" }
+  { name: "Bigger Plate", price: 11.99, details: "Includes 3 entrées and 1 side" },
+  { name: "Appetizer", price: 3.50, details: "1 serving of appetizer"},
+  { name: "a la Carte", price: 4.40, details: "1 serving of side or entrée"},
+  { name: "Drink", price: 2.10, details: "" }
 ];
 
 // Sides data
@@ -66,7 +70,11 @@ const appetizers: MenuItem[] = [
 // Main MenuBoard Component
 const MenuBoard: React.FC = () => {
   return (
+    
     <Box p={6} maxW="2000em" mx="auto">
+      <Box position="absolute" top="10px" left="10px">
+        <BackButton />
+      </Box>
       {/* Combos Section */}
       <Heading as="h2" size="lg" mb={4} textAlign="center">
         Combo Options
@@ -88,38 +96,44 @@ const MenuBoard: React.FC = () => {
       </SimpleGrid>
 
       <Divider my={10} />
+      
+      <Grid templateColumns="1.5fr 4fr" gap={6}>
+        {/* Sides Section */}
+        <Box>
+          <Heading as="h2" size="lg" mb={4} textAlign="center">
+            Sides
+          </Heading>
+          <Grid templateColumns="repeat(1, 1fr)" gap={6}>
+            {sides.map((side, index) => (
+              <GridItem key={index} p={4} borderWidth="1px" borderRadius="md" boxShadow="md">
+                <VStack spacing={3}>
+                  <Image width="18.75em" height="12.5em" src={side.image} alt={side.name} borderRadius="md" />
+                  <Text fontWeight="bold">{side.name}</Text>
+                </VStack>
+              </GridItem>
+            ))}
+          </Grid>
+        </Box>
 
-      {/* Sides Section */}
-      <Heading as="h2" size="lg" mb={4} textAlign="center">
-        Sides
-      </Heading>
-      <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={6} mb={10}>
-        {sides.map((side, index) => (
-          <GridItem key={index} p={4} borderWidth="1px" borderRadius="md" boxShadow="md">
-            <VStack spacing={3}>
-              <Image width="300px" height="200px" src={side.image} alt={side.name} borderRadius="md" />
-              <Text fontWeight="bold">{side.name}</Text>
-            </VStack>
-          </GridItem>
-        ))}
+        {/* Entrees Section */}
+        <Box>
+          <Heading as="h2" size="lg" mb={4} textAlign="center">
+            Entrees
+          </Heading>
+          <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+            {entrees.map((entree, index) => (
+              <GridItem key={index} p={4} borderWidth="1px" borderRadius="md" boxShadow="md">
+                <VStack spacing={3}>
+                  <Image width="18.75em" height="12.5em" src={entree.image} alt={entree.name} borderRadius="md" />
+                  <Text fontWeight="bold">{entree.name}</Text>
+                </VStack>
+              </GridItem>
+            ))}
+          </Grid>
+        </Box>
       </Grid>
 
       <Divider my={10} />
-
-      {/* Entrees Section */}
-      <Heading as="h2" size="lg" mb={4} textAlign="center">
-        Entrees
-      </Heading>
-      <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={6}>
-        {entrees.map((entree, index) => (
-          <GridItem key={index} p={4} borderWidth="1px" borderRadius="md" boxShadow="md">
-            <VStack spacing={3}>
-              <Image width="300px" height="200px" src={entree.image} alt={entree.name} borderRadius="md" />
-              <Text fontWeight="bold">{entree.name}</Text>
-            </VStack>
-          </GridItem>
-        ))}
-      </Grid>
 
       {/* Appetizer Section */}
       <Heading as="h2" size="lg" mb={4} textAlign="center">
@@ -129,7 +143,7 @@ const MenuBoard: React.FC = () => {
         {appetizers.map((appetizer, index) => (
           <GridItem key={index} p={4} borderWidth="1px" borderRadius="md" boxShadow="md">
             <VStack spacing={3}>
-              <Image width="300px" height="200px" src={appetizer.image} alt={appetizer.name} borderRadius="md" />
+              <Image width="18.75em" height="12.5em" src={appetizer.image} alt={appetizer.name} borderRadius="md" />
               <Text fontWeight="bold">{appetizer.name}</Text>
             </VStack>
           </GridItem>
