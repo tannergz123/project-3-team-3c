@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, HStack } from "@chakra-ui/react";
+import { Button, HStack } from "@chakra-ui/react";
 
 interface TypeSelectorProps {
   type: string;

@@ -1,6 +1,6 @@
 // components/MenuItem.tsx
 import React from "react";
-import { Box, Text, Button, VStack } from "@chakra-ui/react";
+import { Box, Text, Button } from "@chakra-ui/react";
 
 interface MenuItemProps {
   name: string;
