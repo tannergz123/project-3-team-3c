@@ -1,42 +1,31 @@
-import {
-    Box,
-    Heading,
-    Flex,
-  } from "@chakra-ui/react"
-  import Menu from "./components/Menu"
-  import BackButton from "../../components/BackButton"
-  import OrderDisplay from "./components/OrderDisplay"
-  
-  export default async function Page() {
-    return (
-      // back button in top left corner
-  
-      <Box position="relative" fontSize="xl" pt="10vh">
-        {/* Back Button positioned in the top left */}
-        <Box position="absolute" top="10px" left="10px">
-          <BackButton />
+// Customer/page.tsx
+"use client";
+import React, { useState } from 'react';
+import { Box, Flex } from '@chakra-ui/react';
+import Header from './components/Header';
+import CategorySelector from './components/CategorySelector';
+import MainContent from './components/MainContent';
+
+export default function CustomerPage() {
+  const [selectedCategory, setSelectedCategory] = useState("Entrees");
+
+  return (
+    <Box>
+      <Header />
+      <Flex mt={6} px={4}>
+        {/* Category Selector on the Left */}
+        <Box width="20%">
+          <CategorySelector
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+          />
         </Box>
-          
-          {/* Order Display */}
-        
-  
-        <Flex direction="row" justify="space-between" align="center">
-          <Box textAlign={"center"} >
-            <Heading as="h2" size="xl" mb={5}>
-              Menu
-            </Heading>
-            <OrderDisplay />
-          </Box>
-  
-          {/* Centered content */}
-          <Box textAlign="center" pt="5vh">
-            <Heading as="h1" size="2xl" mb={10}>
-              Welcome to Panda Express!
-            </Heading>
-            <Menu />
-          </Box>
-        </Flex>
-      </Box>
-    )
-  }
-  
+
+        {/* Main Content Area on the Right */}
+        <Box width="80%" pl={8}>
+          <MainContent selectedCategory={selectedCategory} />
+        </Box>
+      </Flex>
+    </Box>
+  );
+}
