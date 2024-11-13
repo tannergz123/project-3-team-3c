@@ -8,7 +8,7 @@ interface MenuItemProps {
   onAddToOrder: () => void;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ name, itemType, onAddToOrder }) => {
+const MenuItem: React.FC<MenuItemProps> = ({ name, onAddToOrder }) => {
   return (
     <Box
     >
