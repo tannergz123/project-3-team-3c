@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Table, Tbody, Tr, Td, Heading, Button, Text } from '@chakra-ui/react';
+import { Box, Table, Tbody, Tr, Td, Heading, Button } from '@chakra-ui/react';
 import { useState } from 'react';
 
 const MenuManagement = () => {

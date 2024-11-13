@@ -1,7 +1,7 @@
 // Customer/components/AppetizerSelector.tsx
 
 import React from 'react';
-import { Grid, GridItem, Box, Text } from '@chakra-ui/react';
+import { Grid, GridItem, Text } from '@chakra-ui/react';
 
 const appetizerOptions = ["Spring Rolls", "Potstickers", "Egg Rolls", "Wontons"];
 

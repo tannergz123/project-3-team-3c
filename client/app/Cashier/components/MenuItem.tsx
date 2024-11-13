@@ -1,6 +1,6 @@
 // components/MenuItem.tsx
 import React from "react";
-import { Box, Text, Button, VStack } from "@chakra-ui/react";
+import { Box, Text, Button } from "@chakra-ui/react";
 
 interface MenuItemProps {
   name: string;
@@ -8,7 +8,7 @@ interface MenuItemProps {
   onAddToOrder: () => void;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ name, itemType, onAddToOrder }) => {
+const MenuItem: React.FC<MenuItemProps> = ({ name, onAddToOrder }) => {
   return (
     <Box
     >
