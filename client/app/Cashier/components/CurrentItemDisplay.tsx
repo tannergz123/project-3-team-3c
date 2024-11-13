@@ -13,9 +13,9 @@ interface CurrentItemDisplayProps {
 }
 
 export const ITEM_REQUIREMENTS = {
-  "Bowl": { entrees: 1, sides: 1 },
-  "Plate": { entrees: 2, sides: 1 },
-  "Bigger Plate": { entrees: 3, sides: 1 },
+  "Bowl": { entrees: 1, sides: 2 },
+  "Plate": { entrees: 2, sides: 2 },
+  "Bigger Plate": { entrees: 3, sides: 2 },
   "A La Carte": { entrees: 1, sides: 0 },
   "Drink": { entrees: 0, sides: 0, drinks: 1 },
   "Appetizer": { entrees: 0, sides: 0, appetizers: 1 },
