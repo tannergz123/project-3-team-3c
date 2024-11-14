@@ -21,7 +21,6 @@ const sideList: Side[] = [
   { name: "Chow Mein", image: "/menu_images/side/chow_mein.png" },
   { name: "Fried Rice", image: "/menu_images/side/fried_rice.png" },
   { name: "White Steamed Rice", image: "/menu_images/side/white_rice.png" },
-  { name: "Brown Steamed Rice", image: "/menu_images/side/brown_rice.png" },
   // Add more sides as needed
 ];
 
