@@ -21,8 +21,9 @@ def add_mapping(item_name:str = None, ingredient_name:str = None, internal: bool
     try:
         # Extract parameters from query arguments
         if not internal:
-            item_name = request.args.get('item_name')
-            ingredient_name = request.args.get('ingredient_name')
+            data = request.get_json()
+            item_name = data.get('item_name')
+            ingredient_name = data.get('ingredient_name')
 
         # Ensure parameters are provided
         if ingredient_name is None or item_name is None:

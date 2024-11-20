@@ -57,10 +57,10 @@ def add_item():
     '''
     try:
         # Extract parameters from query arguments
-        item_name = request.args.get('item_name')
-        ingredients_str = request.args.get('ingredients')
-        ingredients = json.loads(ingredients_str)
-        item_type = request.args.get('item_type')
+        data = request.get_json()
+        item_name = data.get('item_name')
+        ingredients = data.get('ingredients')
+        item_type = data.get('item_type')
 
         # Ensure acceptable parameters are provided 
         if item_name is None or ingredients is None or item_type is None:
@@ -113,7 +113,8 @@ def delete_item():
 
     try:
         # Extract parameters from query arguments
-        item_name = request.args.get('item_name')
+        data = request.get_json
+        item_name = data.get('item_name')
 
         # Ensure acceptable parameters are provided 
         if item_name is None:
