@@ -51,7 +51,8 @@ def add_ingredients():
 
     try:
         #Extract parameters from query parameters
-        ingredient_name = request.args.get('ingredient_name')
+        data = request.get_json()
+        ingredient_name = data.get('ingredient_name')
 
         # Ensure parameters are provided
         if ingredient_name is None:

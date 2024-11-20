@@ -17,8 +17,9 @@ def add_record():
     """
     try:
         # Extract parameters from query arguments
-        item = request.args.get('item')
-        quantity_ordered = request.args.get('quantity_ordered', type=float)
+        data = request.get_json()
+        item = data.get('item')
+        quantity_ordered = data.get('quantity_ordered', type=float)
         id = -1
 
         # Ensure acceptable parameters are provided 
