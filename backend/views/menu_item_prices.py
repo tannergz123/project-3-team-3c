@@ -51,8 +51,9 @@ def update_menu_item_prices():
     """
     try:
         # Extract parameters from query arguments
-        menu_item = request.args.get('menu_item')
-        price = request.args.get('price', type=float)
+        data = request.get_json()
+        menu_item = data.get('menu_item')
+        price = data.get('price')
 
         # Ensure parameters are provided
         if menu_item is None or price is None:

@@ -49,8 +49,9 @@ def update_employees():
     """
     try:
         #Extract parameters from query parameters
-        employee_name = request.args.get('employee_name')
-        hourly_salary = request.args.get('hourly_salary', type=float)
+        data = request.get_json()
+        employee_name = data.get('employee_name')
+        hourly_salary = data.get('hourly_salary')
 
         # Ensure parameters are provided
         if employee_name is None or hourly_salary is None:
@@ -89,8 +90,9 @@ def create_employees():
     """
     try:
         #Extract parameters from query parameters
-        employee_name = request.args.get('employee_name')
-        hourly_salary = request.args.get('hourly_salary', type=float)
+        data = request.get_json()
+        employee_name = data.get('employee_name')
+        hourly_salary = data.get('hourly_salary')
 
         # Ensure parameters are provided
         if employee_name is None or hourly_salary is None:
@@ -127,7 +129,8 @@ def fire_employees():
     """
     try:
         #Extract parameters from query parameters
-        employee_name = request.args.get('employee_name')
+        data = request.get_json()
+        employee_name = data.get('employee_name')
 
         # Ensure parameters are provided
         if employee_name is None:
