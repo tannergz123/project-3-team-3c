@@ -9,8 +9,8 @@ import {
   setSideQuantity,
   resetSelections,
 } from '../../store/slices/currentSelectionSlice';
-import EntreeOptions from './EntreeSizeSelector/EntreeOptions';
-import SideOptions from './EntreeSizeSelector/SideOptions';
+import EntreeOptions from './EntreeSectionComponents/EntreeOptions';
+import SideOptions from './EntreeSectionComponents/SideOptions';
 import { ITEM_REQUIREMENTS } from '../../Cashier/components/CurrentItemDisplay';
 
 const entreeSizes = ["Bowl", "Plate", "Bigger Plate", "A La Carte"];

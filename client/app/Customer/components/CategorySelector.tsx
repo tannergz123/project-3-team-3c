@@ -1,16 +1,20 @@
-// Customer/components/CategorySelector.tsx
-
 import React from 'react';
 import { VStack, Box, Button } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
-import { selectCategory } from '../../store/slices/categorySlice'
+import { selectCategory } from '../../store/slices/categorySlice';
+import { resetSelections } from '../../store/slices/currentSelectionSlice';
 
 const categories = ["Entrees", "Appetizers", "Drinks"];
 
 const CategorySelector: React.FC = () => {
   const selectedCategory = useSelector((state: RootState) => state.category.selectedCategory);
   const dispatch = useDispatch();
+
+  const handleCategoryChange = (category: string) => {
+    dispatch(resetSelections()); // Clear current selections
+    dispatch(selectCategory(category)); // Update selected category
+  };
 
   return (
     <VStack align="stretch" spacing={4} position="relative">
@@ -33,7 +37,7 @@ const CategorySelector: React.FC = () => {
           variant="ghost"
           justifyContent="flex-start"
           colorScheme={selectedCategory === category ? "red" : "gray"}
-          onClick={() => dispatch(selectCategory(category))}
+          onClick={() => handleCategoryChange(category)}
           fontWeight={selectedCategory === category ? "bold" : "normal"}
         >
           {category}

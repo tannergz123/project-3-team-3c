@@ -3,7 +3,7 @@ import { Grid } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { setSideQuantity } from '../../../store/slices/currentSelectionSlice';
-import ItemCard from './ItemCard';
+import ItemCard from '../ItemCard';
 import { ITEM_REQUIREMENTS } from '../../../Cashier/components/CurrentItemDisplay';
 
 interface Side {
