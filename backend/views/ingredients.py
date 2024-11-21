@@ -1,5 +1,6 @@
 from flask import jsonify, Blueprint, request
 from ..connection import conn
+from .ingredients_order_history import add_record
 
 ingredients = Blueprint("ingredients", __name__)
 
@@ -115,6 +116,12 @@ def order_ingredients():
         # update the quantity of the ingredient
         cur = conn.cursor()
         cur.execute(f"UPDATE ingredients SET quantity = quantity + {quantity}  WHERE ingredient_name = '{ingredient_name}';")
+
+        # call helper function to add a record of this order
+        record_added = add_record(ingredient_name, quantity)
+        if not record_added:
+            return jsonify({ "status": "error", "message": f"Issue with adding a record of this ingredient order into the database."}), 400
+
 
         # ensure that a row has been updated
         if cur.rowcount == 0:

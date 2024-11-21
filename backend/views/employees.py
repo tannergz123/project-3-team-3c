@@ -79,7 +79,7 @@ def update_employees():
         }), 500
 
 
-@employees.route("/create-employees", methods=["PUT"])
+@employees.route("/create-employees", methods=["POST"])
 def create_employees():
     """
     Create a new employee in the database with a specified hourly salary.
