@@ -11,7 +11,7 @@ orders = Blueprint("orders", __name__)
 print("running orders.py")
 
 
-@orders.route("/place-order", methods={"POST"})
+@orders.route("/place-order", methods=["POST"])
 def place_order():
     '''
     Takes in information after a customer submits an order and populates all order tables:
