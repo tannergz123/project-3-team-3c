@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Text, VStack, Divider, CloseButton } from "@chakra-ui/react";
-import { OrderItem } from "../../Types/orderTypes";
+import { OrderItem } from "../../types/orderTypes";
 
 interface OrderDisplayProps {
   order: OrderItem[];
