@@ -1,5 +1,6 @@
 // MenuBoard.tsx
 import React from "react";
+import axios from "axios";
 import {
   Box,
   Heading,
@@ -12,6 +13,9 @@ import {
   Divider
 } from "@chakra-ui/react";
 import BackButton from "../../components/BackButton";
+
+// axios 
+
 
 // Types for menu items
 type MenuItem = {
@@ -26,7 +30,7 @@ type ComboOption = {
 };
 
 // Menu options data
-const combos: ComboOption[] = [
+var combos: ComboOption[] = [
   { name: "Bowl", price: 7.99, details: "Includes 1 entrée and 1 side" },
   { name: "Plate", price: 9.99, details: "Includes 2 entrées and 1 side" },
   { name: "Bigger Plate", price: 11.99, details: "Includes 3 entrées and 1 side" },
@@ -36,7 +40,7 @@ const combos: ComboOption[] = [
 ];
 
 // Sides data
-const sides: MenuItem[] = [
+var sides: MenuItem[] = [
   { name: "Chow Mein", image: "/menu_images/side/chow_mein.png" },
   { name: "Fried Rice", image: "/menu_images/side/fried_rice.png" },
   { name: "White Steamed Rice", image: "/menu_images/side/white_rice.png" },
@@ -44,7 +48,7 @@ const sides: MenuItem[] = [
 ];
 
 // Entrees data
-const entrees: MenuItem[] = [
+var entrees: MenuItem[] = [
   { name: "Orange Chicken", image: "/menu_images/entree/orange_chicken.png" },
   { name: "Beijing Beef", image: "/menu_images/entree/beijing_beef.png" },
   { name: "Broccoli Beef", image: "/menu_images/entree/broccoli_beef.png" },
@@ -60,7 +64,7 @@ const entrees: MenuItem[] = [
 ];
 
 // Appetizers data
-const appetizers: MenuItem[] = [
+var appetizers: MenuItem[] = [
   { name: "Chicken Egg Roll", image: "/menu_images/appetizer/chicken_egg_roll.avif" },
   { name: "Cream Cheese Rangoon", image: "/menu_images/appetizer/cream_cheese_rangoon.avif" },
   { name: "Apple Pie Roll", image: "/menu_images/appetizer/apple_pie_roll.avif" },
@@ -72,30 +76,32 @@ const MenuBoard: React.FC = () => {
   return (
     
     <Box p={6} maxW="2000em" mx="auto">
-      <Box position="absolute" top="10px" left="10px">
+      <Box position="absolute" top="10px" left="10px" borderRadius="md">
         <BackButton />
       </Box>
       {/* Combos Section */}
       <Heading as="h2" size="lg" mb={4} textAlign="center">
         Combo Options
       </Heading>
-      <SimpleGrid columns={[1, 2, 3]} spacing={6} mb={10}>
-        {combos.map((combo, index) => (
-          <Box key={index} p={4} borderWidth="1px" borderRadius="md" boxShadow="md">
-            <Heading as="h3" size="md" mb={2}>
-              {combo.name}
-            </Heading>
-            <Text fontSize="lg" color="gray.600">
-              ${combo.price.toFixed(2)}
-            </Text>
-            <Text fontSize="sm" color="gray.500">
-              {combo.details}
-            </Text>
-          </Box>
-        ))}
-      </SimpleGrid>
+      <Box bg="red.600" borderRadius="md" p={4}>
+        <SimpleGrid columns={[1, 2, 3]} spacing={6}>
+          {combos.map((combo, index) => (
+            <Box key={index} p={4} borderWidth="4px" borderRadius="md" boxShadow="md" borderColor="gold" bg="white">
+              <Heading as="h3" size="md" mb={2}>
+                {combo.name}
+              </Heading>
+              <Text fontSize="lg" color="gray.600">
+                ${combo.price.toFixed(2)}
+              </Text>
+              <Text fontSize="sm" color="gray.500">
+                {combo.details}
+              </Text>
+            </Box>
+          ))}
+        </SimpleGrid>
+      </Box>
 
-      <Divider my={10} />
+      <Divider my={5} />
       
       <Grid templateColumns="1.5fr 4fr" gap={6}>
         {/* Sides Section */}
@@ -103,16 +109,18 @@ const MenuBoard: React.FC = () => {
           <Heading as="h2" size="lg" mb={4} textAlign="center">
             Sides
           </Heading>
-          <Grid templateColumns="repeat(1, 1fr)" gap={6}>
-            {sides.map((side, index) => (
-              <GridItem key={index} p={4} borderWidth="1px" borderRadius="md" boxShadow="md">
-                <VStack spacing={3}>
-                  <Image width="18.75em" height="12.5em" src={side.image} alt={side.name} borderRadius="md" />
-                  <Text fontWeight="bold">{side.name}</Text>
-                </VStack>
-              </GridItem>
-            ))}
-          </Grid>
+          <Box p={4} borderRadius="md" bg="red.600">
+            <Grid templateColumns="repeat(1, 1fr)" gap={6}>
+              {sides.map((side, index) => (
+                <GridItem key={index} p={4} borderWidth="4px" borderRadius="md" boxShadow="md" borderColor="gold" bg="white">
+                  <VStack spacing={3}>
+                    <Image width="18.75em" height="12.5em" src={side.image} alt={side.name} borderRadius="md" />
+                    <Text fontWeight="bold">{side.name}</Text>
+                  </VStack>
+                </GridItem>
+              ))}
+            </Grid>
+          </Box>
         </Box>
 
         {/* Entrees Section */}
@@ -120,16 +128,18 @@ const MenuBoard: React.FC = () => {
           <Heading as="h2" size="lg" mb={4} textAlign="center">
             Entrees
           </Heading>
-          <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-            {entrees.map((entree, index) => (
-              <GridItem key={index} p={4} borderWidth="1px" borderRadius="md" boxShadow="md">
-                <VStack spacing={3}>
-                  <Image width="18.75em" height="12.5em" src={entree.image} alt={entree.name} borderRadius="md" />
-                  <Text fontWeight="bold">{entree.name}</Text>
-                </VStack>
-              </GridItem>
-            ))}
-          </Grid>
+          <Box p={4} borderRadius="md" bg="red.600">
+            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+              {entrees.map((entree, index) => (
+                <GridItem key={index} p={4} borderWidth="4px" borderRadius="md" boxShadow="md" borderColor="gold" bg="white">
+                  <VStack spacing={3}>
+                    <Image width="18.75em" height="12.5em" src={entree.image} alt={entree.name} borderRadius="md" />
+                    <Text fontWeight="bold">{entree.name}</Text>
+                  </VStack>
+                </GridItem>
+              ))}
+            </Grid>
+          </Box>
         </Box>
       </Grid>
 
@@ -139,16 +149,18 @@ const MenuBoard: React.FC = () => {
       <Heading as="h2" size="lg" mb={4} textAlign="center">
         Appetizers
       </Heading>
-      <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={6}>
-        {appetizers.map((appetizer, index) => (
-          <GridItem key={index} p={4} borderWidth="1px" borderRadius="md" boxShadow="md">
-            <VStack spacing={3}>
-              <Image width="18.75em" height="12.5em" src={appetizer.image} alt={appetizer.name} borderRadius="md" />
-              <Text fontWeight="bold">{appetizer.name}</Text>
-            </VStack>
-          </GridItem>
-        ))}
-      </Grid>
+      <Box p={4} borderRadius="md" bg="red.600">
+        <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={6}>
+          {appetizers.map((appetizer, index) => (
+            <GridItem key={index} p={4} borderWidth="4px" borderRadius="md" boxShadow="md" borderColor="gold" bg="white">
+              <VStack spacing={3}>
+                <Image width="18.75em" height="12.5em" src={appetizer.image} alt={appetizer.name} borderRadius="md" />
+                <Text fontWeight="bold">{appetizer.name}</Text>
+              </VStack>
+            </GridItem>
+          ))}
+        </Grid>
+      </Box>
     </Box>
   );
 };

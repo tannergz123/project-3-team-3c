@@ -2,15 +2,16 @@
 
 import React from 'react';
 import { VStack, Box, Button } from '@chakra-ui/react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store/store';
+import { selectCategory } from '../../store/slices/categorySlice'
 
 const categories = ["Entrees", "Appetizers", "Drinks"];
 
-interface CategorySelectorProps {
-  selectedCategory: string;
-  onSelectCategory: (category: string) => void;
-}
+const CategorySelector: React.FC = () => {
+  const selectedCategory = useSelector((state: RootState) => state.category.selectedCategory);
+  const dispatch = useDispatch();
 
-const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, onSelectCategory }) => {
   return (
     <VStack align="stretch" spacing={4} position="relative">
       {/* Sliding Indicator */}
@@ -32,7 +33,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, o
           variant="ghost"
           justifyContent="flex-start"
           colorScheme={selectedCategory === category ? "red" : "gray"}
-          onClick={() => onSelectCategory(category)}
+          onClick={() => dispatch(selectCategory(category))}
           fontWeight={selectedCategory === category ? "bold" : "normal"}
         >
           {category}

@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Box, Heading, Flex, Button, Grid, GridItem } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Box, Flex, Button, Grid, GridItem } from "@chakra-ui/react";
 import Menu from "./components/Menu";
 import BackButton from "../../components/BackButton";
 import OrderDisplay from "./components/OrderDisplay";
 import TypeSelector from "./components/TypeSelector";
 import CurrentItemDisplay from "./components/CurrentItemDisplay";
-import { OrderItem } from "../Types/orderTypes";
+import { OrderItem } from "../types/orderTypes";
 import { ITEM_REQUIREMENTS } from './components/CurrentItemDisplay';
 
 // Define the prices for each type
