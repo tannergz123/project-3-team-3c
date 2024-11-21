@@ -145,7 +145,7 @@ def delete_item():
 
     try:
         # Extract parameters from query arguments
-        data = request.get_json
+        data = request.get_json()
         item_name = data.get('item_name')
 
         # Ensure acceptable parameters are provided 
