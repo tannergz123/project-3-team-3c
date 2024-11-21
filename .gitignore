@@ -30,4 +30,7 @@ yarn-error.log*
 .env.production.local
 .env
 
+#testing files
+.test.py
+
 .now
