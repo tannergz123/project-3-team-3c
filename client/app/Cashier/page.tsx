@@ -7,7 +7,7 @@ import BackButton from "../../components/BackButton";
 import OrderDisplay from "./components/OrderDisplay";
 import TypeSelector from "./components/TypeSelector";
 import CurrentItemDisplay from "./components/CurrentItemDisplay";
-import { OrderItem } from "../Types/orderTypes";
+import { OrderItem } from "../types/orderTypes";
 import { ITEM_REQUIREMENTS } from './components/CurrentItemDisplay';
 
 // Define the prices for each type

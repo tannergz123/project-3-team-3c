@@ -3,36 +3,31 @@ import { HStack, Button, Text, Box } from '@chakra-ui/react';
 
 interface QuantityControlProps {
   quantity: number;
+  isIncrementDisabled: boolean;
+  isDisabled: boolean;
   onIncrement: () => void;
   onDecrement: () => void;
 }
 
-const QuantityControl: React.FC<QuantityControlProps> = ({ quantity, onIncrement, onDecrement }) => {
+const QuantityControl: React.FC<QuantityControlProps> = ({ quantity, isDisabled, isIncrementDisabled, onIncrement, onDecrement }) => {
   return (
-    <Box 
-      bg="white"
-      border="1px solid"
-      borderColor="gray.300"
-      borderRadius="full"
-      p={1}
-      px={5}
-      boxShadow="sm"
-      width="fit-content"
-      mx="auto"      
-      mt = {10}
-    >
-      <HStack spacing={2} align="center" justify="center">
-        <Button size="xs" variant="outline" onClick={onDecrement} borderRadius="full" minWidth="24px" p={1}>
-          –
-        </Button>
-        <Box bg="red.600" color="white" borderRadius="full" p={1} px={3} minWidth="28px" textAlign="center">
-          <Text fontWeight="bold" fontSize="md">{quantity}</Text>
-        </Box>
-        <Button size="xs" variant="outline" onClick={onIncrement} borderRadius="full" minWidth="24px" p={1}>
-          +
-        </Button>
-      </HStack>
-    </Box>
+    <HStack spacing={4} align="center" justify="center">
+      <Button size="sm" variant="outline" onClick={onDecrement} borderRadius="full" isDisabled ={isDisabled}>
+        –
+      </Button>
+      <Box bg="red.600" color="white" borderRadius="full" p={2} px={4}>
+        <Text fontWeight="bold" fontSize="lg">{quantity}</Text>
+      </Box>
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={onIncrement}
+        borderRadius="full"
+        isDisabled={isIncrementDisabled || isDisabled} // Disable increment button if true
+      >
+        +
+      </Button>
+    </HStack>
   );
 };
 
