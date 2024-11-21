@@ -12,7 +12,7 @@ ITEM_TYPES = ['Appetizer', 'Entree', 'Side', 'Drink', 'Packaging']
 print("running items.py")
 
 
-@items.route("/get-all-items", methods="GET")
+@items.route("/get-all-items", methods=["GET"])
 def get_all_items():
     """
     Queries the items table and returns item_name, item_type, calories, protein, calories for all active items.
@@ -173,5 +173,47 @@ def delete_item():
             "message": str(e)
         }), 500
 
+@items.route("/make-items", methods=["PUT"])
+def make_items():
+    """
+    Make [quantity] number of [item_name] items.  
+
+    Parameters:
+    item_name : the name of the item you want to make more of
+    quantity: the amount of the item that you want to make more of
+    """
+
+    try:
+        #Extract parameters from query parameters
+        data = request.get_json()
+        item_name = data.get('item_name')
+        quantity = data.get('quantity')
+
+        # Ensure parameters are provided
+        if item_name is None and type(item_name) != str:
+            return jsonify({ "status": "error", "message": "item_name is required" }), 400
+        if quantity is None and type(quantity) != int:
+            return jsonify({ "status": "error", "message": "quantity is required" }), 400
+        
+        # update the quantity of the ingredient
+        cur = conn.cursor()
+        cur.execute(f"UPDATE items SET quantity = quantity + {quantity}  WHERE item_name = '{item_name}' AND active_item = 'true';")
+
+        # ensure that a row has been updated
+        if cur.rowcount == 0:
+            return jsonify({ "status": "error", "message": f"{item_name} must exist in the items table and be an active item." }), 400
+
+        
+        #close cursor
+        conn.commit()
+        cur.close()
+
+        return jsonify({"status": "successful"}), 200
+    except Exception as e:
+        print("Error querying @ /items/make-items ||", e)
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
 

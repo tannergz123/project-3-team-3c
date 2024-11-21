@@ -89,3 +89,46 @@ def add_ingredients():
             "status": "error",
             "message": str(e)
         }), 500
+
+@ingredients.route("/order-ingredients", methods=["PUT"])
+def order_ingredients():
+    """
+    Orders [quantity] number of [ingredient_name] ingredient.  
+
+    Parameters:
+    ingredient_name : the name of the ingredient you want to order more of
+    quantity: the amount of the ingredient that you want to order more of
+    """
+
+    try:
+        #Extract parameters from query parameters
+        data = request.get_json()
+        ingredient_name = data.get('ingredient_name')
+        quantity = data.get('quantity')
+
+        # Ensure parameters are provided
+        if ingredient_name is None and type(ingredient_name) != str:
+            return jsonify({ "status": "error", "message": "ingredient_name is required" }), 400
+        if quantity is None and type(quantity) != int:
+            return jsonify({ "status": "error", "message": "quantity is required" }), 400
+        
+        # update the quantity of the ingredient
+        cur = conn.cursor()
+        cur.execute(f"UPDATE ingredients SET quantity = quantity + {quantity}  WHERE ingredient_name = '{ingredient_name}';")
+
+        # ensure that a row has been updated
+        if cur.rowcount == 0:
+            return jsonify({ "status": "error", "message": f"{ingredient_name} doesn't exist in the ingredients table." }), 400
+
+        
+        #close cursor
+        conn.commit()
+        cur.close()
+
+        return jsonify({"status": "successful"}), 200
+    except Exception as e:
+        print("Error querying @ /ingredients/order-ingredients ||", e)
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
