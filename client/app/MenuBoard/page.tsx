@@ -1,5 +1,7 @@
 // MenuBoard.tsx
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Box,
@@ -9,6 +11,8 @@ import {
   Grid,
   GridItem,
   VStack,
+  HStack,
+  Spacer,
   SimpleGrid,
   Divider
 } from "@chakra-ui/react";
@@ -20,7 +24,10 @@ import BackButton from "../../components/BackButton";
 // Types for menu items
 type MenuItem = {
   name: string;
-  image: string; // URL to image or StaticImageData
+  calories?: string;
+  protein?: string;
+  type?: string;
+  image?: string; // URL to image or StaticImageData
 };
 
 type ComboOption = {
@@ -40,15 +47,15 @@ var combos: ComboOption[] = [
 ];
 
 // Sides data
-var sides: MenuItem[] = [
+/* var sides: MenuItem[] = [
   { name: "Chow Mein", image: "/menu_images/side/chow_mein.png" },
   { name: "Fried Rice", image: "/menu_images/side/fried_rice.png" },
   { name: "White Steamed Rice", image: "/menu_images/side/white_rice.png" },
   { name: "Super Greens", image: "/menu_images/side/super_greens.png" }
-];
+]; */
 
 // Entrees data
-var entrees: MenuItem[] = [
+/* var entrees: MenuItem[] = [
   { name: "Orange Chicken", image: "/menu_images/entree/orange_chicken.png" },
   { name: "Beijing Beef", image: "/menu_images/entree/beijing_beef.png" },
   { name: "Broccoli Beef", image: "/menu_images/entree/broccoli_beef.png" },
@@ -61,18 +68,77 @@ var entrees: MenuItem[] = [
   { name: "Black Pepper Sirloin Steak", image: "/menu_images/entree/bp_steak.png" },
   { name: "Black Pepper Chicken", image: "/menu_images/entree/bp_chicken.png" },
   { name: "String Bean Chicken Breast", image: "/menu_images/entree/sb_chicken.png" }
-];
+]; */
 
 // Appetizers data
-var appetizers: MenuItem[] = [
+/* var appetizers: MenuItem[] = [
   { name: "Chicken Egg Roll", image: "/menu_images/appetizer/chicken_egg_roll.avif" },
   { name: "Cream Cheese Rangoon", image: "/menu_images/appetizer/cream_cheese_rangoon.avif" },
   { name: "Apple Pie Roll", image: "/menu_images/appetizer/apple_pie_roll.avif" },
   { name: "Veggie Spring Roll", image: "/menu_images/appetizer/veggie_spring_roll.avif" }
-]
+] */
 
 // Main MenuBoard Component
 const MenuBoard: React.FC = () => {
+
+  const [entrees, setEntrees] = useState<MenuItem[]>([]);
+  const [sides, setSides] = useState<MenuItem[]>([]);
+  const [appetizers, setAppetizers] = useState<MenuItem[]>([]);
+
+useEffect(() => {
+  // fetch
+  axios
+    .get('https://project-3-team-3c.onrender.com/items/get-all-items')
+    .then((response) => {
+      const items = response.data;
+
+      // classify items into categories
+      const entree_list: MenuItem[] = [];
+      const side_list: MenuItem[] = [];
+      const appetizer_list: MenuItem[] = [];
+
+      items.forEach((item: any) => {
+
+        const img_path = "/menu_images/" + item.item_name.split(' ').map(word => word.toLowerCase()).join('_') + ".png";
+
+        const formattedItem = {
+          name: item.item_name,
+          calories: item.calories ? item.calories : 0,
+          protein: item.protein ? item.protein : 0,
+          type: item.item_type,
+          image: img_path ? img_path: "/menu_images/no_image.png"
+        };
+
+        switch (item.item_type) {
+          case "Entree":
+            entree_list.push(formattedItem);
+            break;
+          
+          case "Side":
+            side_list.push(formattedItem);
+            break;
+          
+          case "Appetizer":
+            appetizer_list.push(formattedItem);
+            break;
+        }
+      });
+
+      // update state
+      setEntrees(entree_list);
+      setSides(side_list);
+      setAppetizers(appetizer_list);
+
+      console.log("Menu data fetched successfully");
+      console.log(entrees);
+      console.log(sides);
+      console.log(appetizers);
+    })
+    .catch((error) => {
+      console.error("Error fetching menu data:", error);
+    });
+}, []);
+
   return (
     
     <Box p={6} maxW="2000em" mx="auto">
@@ -116,6 +182,11 @@ const MenuBoard: React.FC = () => {
                   <VStack spacing={3}>
                     <Image width="18.75em" height="12.5em" src={side.image} alt={side.name} borderRadius="md" />
                     <Text fontWeight="bold">{side.name}</Text>
+                    <HStack width="100%">
+
+                      <Spacer />
+                      <Text>Calories: {side.calories} Protein: {side.protein}</Text>
+                    </HStack>
                   </VStack>
                 </GridItem>
               ))}
@@ -133,8 +204,13 @@ const MenuBoard: React.FC = () => {
               {entrees.map((entree, index) => (
                 <GridItem key={index} p={4} borderWidth="4px" borderRadius="md" boxShadow="md" borderColor="gold" bg="white">
                   <VStack spacing={3}>
-                    <Image width="18.75em" height="12.5em" src={entree.image} alt={entree.name} borderRadius="md" />
+                    <Image width="18.75vh" height="12.5vh" src={entree.image} alt={entree.name} borderRadius="md" />
                     <Text fontWeight="bold">{entree.name}</Text>
+                    <HStack width="100%">
+                      
+                      <Spacer />
+                      <Text>Calories: {entree.calories} Protein: {entree.protein}</Text>
+                    </HStack>
                   </VStack>
                 </GridItem>
               ))}
