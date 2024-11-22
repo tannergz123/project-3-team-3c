@@ -203,8 +203,10 @@ def make_items():
         if cur.rowcount == 0:
             return jsonify({ "status": "error", "message": f"{item_name} must exist in the items table and be an active item." }), 400
 
+        # call helper functio0n in items_order_history to record the transaction
         
-        #close cursor
+        
+        # close cursor
         conn.commit()
         cur.close()
 
