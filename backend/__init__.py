@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 from .views.employees import employees
 from .views.ingredients_order_history import ingredients_order_history
@@ -14,6 +15,7 @@ from .views.orders import orders
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)  # Allow all origins by default
 
     #register blueprints for all views
     app.register_blueprint(employees, url_prefix ='/employees')
