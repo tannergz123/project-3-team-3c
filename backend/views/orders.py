@@ -67,10 +67,14 @@ def place_order():
         cur = conn.cursor()
         
         #get the employee_id given the name
-        cur.execute(f"SELECT employee_id FROM employees WHERE employee_name = '{employee_name}';")
-        if cur.rowcount == 0:
-            return jsonify({ "status": "error", "message": "No employee exists with this name." }), 400
-        employee_id = cur.fetchall()[0][0]
+        if employee_name != None:
+            cur.execute(f"SELECT employee_id FROM employees WHERE employee_name = '{employee_name}';")
+            if cur.rowcount == 0:
+                return jsonify({ "status": "error", "message": "No employee exists with this name." }), 400
+            employee_id = cur.fetchall()[0][0]
+        else:
+            #hardcoded id in the database for customer kiosk (customer placed order)
+            employee_id = 28
 
         #convert sub_items into sub_items_ids
         for item in range(len(sub_items)):
