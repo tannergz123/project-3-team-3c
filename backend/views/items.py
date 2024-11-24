@@ -2,6 +2,7 @@ from flask import jsonify, Blueprint, request
 import json
 from ..connection import conn
 from .items_ingredients import add_mapping
+from .items_order_history import add_record
 
 items = Blueprint("items", __name__)
 
@@ -203,9 +204,12 @@ def make_items():
         if cur.rowcount == 0:
             return jsonify({ "status": "error", "message": f"{item_name} must exist in the items table and be an active item." }), 400
 
-        # call helper functio0n in items_order_history to record the transaction
+        # call helper function to add a record of this order
+        record_added = add_record(item_name, quantity)
+        if not record_added:
+            return jsonify({ "status": "error", "message": f"Issue with adding a record of this make item order into the database."}), 400
         
-        
+
         # close cursor
         conn.commit()
         cur.close()
