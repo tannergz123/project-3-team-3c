@@ -52,7 +52,7 @@ def place_order():
         order_date = str(datetime.now())
         
         # Ensure acceptable parameters are provided 
-        if type(employee_name) != str:
+        if employee_name != None and type(employee_name) != str:
             return jsonify({ "status": "error", "message": "employee_name is an optional parameter but it must be a string." }), 400
         if customer_name == None or type(customer_name) != str:
             return jsonify({ "status": "error", "message": "customer_name is an required parameter and it must be a string." }), 400
