@@ -21,9 +21,11 @@ def add_record(ingredient:str, quantity_ordered:int):
         # Ensure acceptable parameters are provided 
         if ingredient is None or quantity_ordered is None:
             print("All of ingredient, quantity_ordered, and ingredients_order_id are required.")
+            return False
         
         if quantity_ordered < 0 or quantity_ordered > 1000:
             print("quantity_ordered must be a positive value and be less than or equal 1000.")
+            return False
 
         #get primary key and verify if the ingredient does actually exist
         cur = conn.cursor()
@@ -43,7 +45,8 @@ def add_record(ingredient:str, quantity_ordered:int):
         cur.execute(f"INSERT INTO ingredients_order_history (ingredients_order_id, ingredient_id, item, ordered, quantity_ordered) VALUES ({ingredients_order_id}, {id}, '{ingredient}', '{current_datetime}', {quantity_ordered});")
 
         if cur.rowcount == 0:
-            return jsonify({ "status": "error", "message": "some error" }), 404
+            print(f"Unable to add record of {quantity_ordered} order of {ingredient}.")
+            return False
 
         #close cursor
         conn.commit()
