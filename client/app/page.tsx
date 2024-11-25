@@ -13,6 +13,7 @@ export default function HomePage() {
     { title: "Customer", path: "/Customer" },
     { title: "Manager", path: "/Manager" },
     { title: "Menu Board", path: "/MenuBoard" },
+    { title: "Sign In", path: "/SignIn" },
   ];
 
   return (
