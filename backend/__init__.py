@@ -11,6 +11,7 @@ from .views.menu_item_prices import menu_item_prices
 from .views.order_items import order_items
 from .views.order_sub_items import order_sub_items
 from .views.orders import orders
+from .views.reports import reports
 
 
 def create_app():
@@ -28,5 +29,6 @@ def create_app():
     app.register_blueprint(order_items, url_prefix="/order-items")
     app.register_blueprint(order_sub_items, url_prefix="/order-sub-items")
     app.register_blueprint(orders, url_prefix="/orders")
+    app.register_blueprint(reports, url_prefix="/reports")
 
     return app
