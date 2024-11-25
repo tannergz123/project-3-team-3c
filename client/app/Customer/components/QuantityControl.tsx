@@ -3,8 +3,8 @@ import { HStack, Button, Text, Box } from '@chakra-ui/react';
 
 interface QuantityControlProps {
   quantity: number;
-  isIncrementDisabled: boolean;
-  isDisabled: boolean;
+  isIncrementDisabled?: boolean;
+  isDisabled?: boolean;
   onIncrement: () => void;
   onDecrement: () => void;
 }

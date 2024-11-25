@@ -86,8 +86,12 @@ const EntreeSizeSelector: React.FC = () => {
               )}
 
               <Box>
-                <Text fontSize="lg" fontWeight="bold" color="gray.700" mb={2}>Entrees</Text>
-                <EntreeOptions/>
+                <Box>
+                  <Text fontSize="lg" fontWeight="bold" color="gray.700" mb={2}>
+                    Entree (Select {selectedSize && ITEM_REQUIREMENTS[selectedSize]?.entrees || 1})
+                  </Text>
+                  <EntreeOptions />
+                </Box>
               </Box>
             </VStack>
           </Box>

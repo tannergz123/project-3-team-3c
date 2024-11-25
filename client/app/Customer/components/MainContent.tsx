@@ -35,7 +35,34 @@ const MainContent: React.FC = () => {
   );
 
   const handleAddToOrder = () => {
-    if (currentSelection.selectedSize || selectedCategory) {
+    if (!currentSelection.selectedSize && !selectedCategory) return;
+
+    if (selectedCategory === "Appetizers" || selectedCategory === "Drinks") {
+      // Handle appetizers or drinks: Add each selected item as a separate cart item
+      const itemsToAdd = Object.entries(
+        selectedCategory === "Appetizers"
+          ? currentSelection.appetizers || {}
+          : currentSelection.drinks || {}
+      ).filter(([_, quantity]) => quantity > 0);
+
+      itemsToAdd.forEach(([name, quantity]) => {
+        for (let i = 0; i < quantity; i++) {
+          dispatch(
+            addItemToCart({
+              name,
+              entrees: [],
+              sides: [],
+              appetizer: selectedCategory === "Appetizers" ? name : "",
+              drink: selectedCategory === "Drinks" ? name : "",
+              quantity: 1,
+              price: calculatePrice({ ...currentSelection, selectedSize: null }),
+              cartItemId: Date.now(),
+            })
+          );
+        }
+      });
+    } else {
+      // Handle entrees or sides: Add them as a single cart item
       dispatch(
         addItemToCart({
           name: currentSelection.selectedSize || selectedCategory,
@@ -45,36 +72,27 @@ const MainContent: React.FC = () => {
           sides: Object.entries(currentSelection.sides)
             .filter(([_, quantity]) => quantity > 0)
             .map(([name]) => name),
-          appetizer:
-            selectedCategory === "Appetizers"
-              ? Object.entries(currentSelection.appetizers || {})
-                  .filter(([_, quantity]) => quantity > 0)
-                  .map(([name]) => name)[0] || ""
-              : "",
-          drink:
-            selectedCategory === "Drinks"
-              ? Object.entries(currentSelection.drinks || {})
-                  .filter(([_, quantity]) => quantity > 0)
-                  .map(([name]) => name)[0] || ""
-              : "",
+          appetizer: "",
+          drink: "",
           quantity: 1,
           price: calculatePrice(currentSelection),
           cartItemId: Date.now(),
         })
       );
-
-      // Reset current selection
-      dispatch(resetSelections());
-
-      // Display success feedback
-      toast({
-        title: "Item added to order!",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
     }
+
+    // Reset current selection
+    dispatch(resetSelections());
+
+    // Display success feedback
+    toast({
+      title: "Added to order!",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
   };
+
 
   const calculatePrice = (selection: RootState["currentSelection"]) => {
     let price = 0;
