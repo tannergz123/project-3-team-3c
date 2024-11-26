@@ -3,26 +3,19 @@ import { Grid } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { setSideQuantity } from '../../../store/slices/currentSelectionSlice';
-import ItemCard from './ItemCard';
+import ItemCard from '../ItemCard';
 import { ITEM_REQUIREMENTS } from '../../../Cashier/components/CurrentItemDisplay';
-
-interface Side {
-  name: string;
-  image: string;
-}
-
-// List of side items
-const sideList: Side[] = [
-  { name: "Chow Mein", image: "/menu_images/side/chow_mein.png" },
-  { name: "Fried Rice", image: "/menu_images/side/fried_rice.png" },
-  { name: "White Steamed Rice", image: "/menu_images/side/white_rice.png" },
-  // Add more sides as needed
-];
 
 const SideOptions: React.FC = () => {
   const dispatch = useDispatch();
+  
+  // Selectors for current selection and items from Redux
   const sideQuantities = useSelector((state: RootState) => state.currentSelection.sides);
   const selectedSize = useSelector((state: RootState) => state.currentSelection.selectedSize);
+  const items = useSelector((state: RootState) => state.items.items);
+
+  // Filter items to get only sides
+  const sideList = items.filter((item) => item.item_type === "Side");
 
   const requirements = ITEM_REQUIREMENTS[selectedSize || ""] || { sides: 0 };
 
@@ -33,30 +26,34 @@ const SideOptions: React.FC = () => {
   return (
     <Grid templateColumns="repeat(3, 1fr)" gap={10}>
       {sideList.map((side) => {
-        const isSelected = sideQuantities[side.name] > 0;
+        const isSelected = sideQuantities[side.item_name] > 0;
         const isDisabled = maxSidesReached && !isSelected;
         const isIncrementDisabled = maxSidesReached;
 
         return (
           <ItemCard
-            key={side.name}
-            item={{ ...side, type: "Side" }}
-            quantity={sideQuantities[side.name] || 0}
+            key={side.item_name}
+            item={{
+              name: side.item_name,
+              image: `/menu_images/${side.item_name.toLowerCase().replace(/ /g, "_")}.png`,
+              type: "Side",
+            }}
+            quantity={sideQuantities[side.item_name] || 0}
             isIncrementDisabled={isIncrementDisabled}
             isDisabled={isDisabled} // Disable entire card if not selected and max is reached
             onIncrement={() =>
               dispatch(
                 setSideQuantity({
-                  name: side.name,
-                  quantity: (sideQuantities[side.name] || 0) + 1,
+                  name: side.item_name,
+                  quantity: (sideQuantities[side.item_name] || 0) + 1,
                 })
               )
             }
             onDecrement={() =>
               dispatch(
                 setSideQuantity({
-                  name: side.name,
-                  quantity: Math.max((sideQuantities[side.name] || 0) - 1, 0),
+                  name: side.item_name,
+                  quantity: Math.max((sideQuantities[side.item_name] || 0) - 1, 0),
                 })
               )
             }
