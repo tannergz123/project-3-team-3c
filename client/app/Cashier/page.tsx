@@ -1,30 +1,68 @@
 "use client";
 
-import React, { useState } from "react";
-import { Box, Flex, Button, Grid, GridItem } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Box, Flex, Button, Grid, GridItem, Select, Input, useToast } from "@chakra-ui/react";
 import Menu from "./components/Menu";
 import BackButton from "../../components/BackButton";
 import OrderDisplay from "./components/OrderDisplay";
 import TypeSelector from "./components/TypeSelector";
 import CurrentItemDisplay from "./components/CurrentItemDisplay";
 import { OrderItem } from "../types/orderTypes";
-import { ITEM_REQUIREMENTS } from './components/CurrentItemDisplay';
-
-// Define the prices for each type
-const MENU_ITEM_PRICES = {
-  "Appetizer": 3.50,
-  "Bowl": 10.00,
-  "Plate": 10.00,
-  "Bigger Plate": 11.30,
-  "A La Carte": 4.40,
-  "Drink": 2.10,
-};
+import { ITEM_REQUIREMENTS } from "./components/CurrentItemDisplay";
 
 export default function Page() {
+  const [menuPrices, setMenuPrices] = useState<Record<string, number>>({});
+  const [loadingPrices, setLoadingPrices] = useState(true);
+  const [priceError, setPriceError] = useState<string | null>(null);
+
   const [order, setOrder] = useState<OrderItem[]>([]);
   const [type, setType] = useState("");
 
-  // State for the current item being constructed
+  const [employees, setEmployees] = useState<
+    { employee_name: string; active_employee: boolean }[]
+  >([]);
+  const [selectedEmployee, setSelectedEmployee] = useState("");
+  const [customerName, setCustomerName] = useState("");
+
+  const toast = useToast();
+
+  useEffect(() => {
+    const fetchMenuPrices = async () => {
+      try {
+        setLoadingPrices(true);
+        const response = await axios.get(
+          "https://project-3-team-3c.onrender.com/menu-item-prices/get-menu-item-prices"
+        );
+        const prices = response.data.reduce((acc: Record<string, number>, item: any) => {
+          acc[item.menu_item_name.toLowerCase()] = parseFloat(item.menu_item_price);
+          return acc;
+        }, {});
+        setMenuPrices(prices);
+      } catch (error) {
+        setPriceError("Failed to load menu prices.");
+        console.error(error);
+      } finally {
+        setLoadingPrices(false);
+      }
+    };
+
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get(
+          "https://project-3-team-3c.onrender.com/employees/get-employees"
+        );
+        const activeEmployees = response.data.filter((emp: any) => emp.active_employee);
+        setEmployees(activeEmployees);
+      } catch (error) {
+        console.error("Failed to fetch employees", error);
+      }
+    };
+
+    fetchMenuPrices();
+    fetchEmployees();
+  }, []);
+
   const [currentItem, setCurrentItem] = useState<{
     type: string;
     price: number;
@@ -41,12 +79,11 @@ export default function Page() {
     appetizer: "",
   });
 
-  // Function to handle type selection and set price
   const handleTypeChange = (selectedType: string) => {
-    setType(selectedType); // Update type state
+    setType(selectedType);
     setCurrentItem({
       type: selectedType,
-      price: MENU_ITEM_PRICES[selectedType] || 0, // Set price based on type
+      price: menuPrices[selectedType.toLowerCase()] || 0,
       entrees: [],
       sides: [],
       drink: "",
@@ -54,13 +91,10 @@ export default function Page() {
     });
   };
 
-  // Function to handle selecting an entrée
   const handleSelectEntree = (entree: string) => {
-    console.log("current item type", currentItem.type);
     const maxEntrees = ITEM_REQUIREMENTS[currentItem.type]?.entrees || 0;
     const entreesSelected = currentItem.entrees.reduce((sum, e) => sum + e.quantity, 0);
-  
-    // Only add the entree if the current count is less than the max
+
     if (entreesSelected < maxEntrees) {
       setCurrentItem((prev) => {
         const existingEntree = prev.entrees.find((e) => e.name === entree);
@@ -72,14 +106,12 @@ export default function Page() {
         return { ...prev };
       });
     }
-  };  
+  };
 
-  // Function to handle selecting a side
   const handleSelectSide = (side: string) => {
     const maxSides = ITEM_REQUIREMENTS[currentItem.type]?.sides || 0;
     const sidesSelected = currentItem.sides.length;
-  
-    // Only add the side if the current count is less than the max
+
     if (sidesSelected < maxSides) {
       setCurrentItem((prev) => ({
         ...prev,
@@ -87,7 +119,6 @@ export default function Page() {
       }));
     }
   };
-  
 
   const handleSelectDrink = (drink: string) => {
     if (!currentItem.drink) {
@@ -97,23 +128,38 @@ export default function Page() {
       }));
     }
   };
-  
+
   const handleSelectAppetizer = (appetizer: string) => {
-    // Only set the appetizer if no appetizer is currently selected
     if (!currentItem.appetizer) {
       setCurrentItem((prev) => ({
         ...prev,
         appetizer,
       }));
-    } 
-  }
+    }
+  };
 
-
-  // Function to add the current item to the order
   const addItem = () => {
+    const itemRequirements = ITEM_REQUIREMENTS[currentItem.type];
+    const entreesSelected = currentItem.entrees.reduce((sum, e) => sum + e.quantity, 0);
+
+    if (
+      (itemRequirements?.entrees && entreesSelected < itemRequirements.entrees) ||
+      (itemRequirements?.sides && currentItem.sides.length < itemRequirements.sides) ||
+      (itemRequirements?.drink && !currentItem.drink) ||
+      (itemRequirements?.appetizer && !currentItem.appetizer)
+    ) {
+      toast({
+        title: "Item requirements not met",
+        description: `Make sure to meet the requirements for ${currentItem.type}`,
+        status: "warning",
+        duration: 3000,
+      });
+      return;
+    }
+
     const newItem: OrderItem = {
       name: currentItem.type,
-      price: currentItem.price, // Add price to order item
+      price: currentItem.price,
       entrees: currentItem.entrees,
       drink: currentItem.drink,
       appetizer: currentItem.appetizer,
@@ -125,12 +171,17 @@ export default function Page() {
     resetCurrentItem();
   };
 
-  // Function to reset the current item
   const resetCurrentItem = () => {
-    setCurrentItem({ type, price: MENU_ITEM_PRICES[type] || 0, entrees: [], sides: [], drink: "", appetizer: ""});
+    setCurrentItem({
+      type,
+      price: menuPrices[type.toLowerCase()] || 0,
+      entrees: [],
+      sides: [],
+      drink: "",
+      appetizer: "",
+    });
   };
 
-  // Function to remove an item from the order
   const handleRemoveFromOrder = (itemId: number) => {
     setOrder((prevOrder) =>
       prevOrder
@@ -144,6 +195,69 @@ export default function Page() {
     );
   };
 
+  const handleSubmitOrder = async () => {
+    if (!selectedEmployee || !customerName) {
+      toast({
+        title: "Missing information",
+        description: "Please select an employee and enter a customer name.",
+        status: "warning",
+        duration: 3000,
+      });
+      return;
+    }
+
+    const subItems = order.flatMap((item) => {
+      if (item.entrees.length > 0 || item.sides.length > 0) {
+        return Array(item.quantity)
+          .fill(null)
+          .map(() => [
+            ...item.entrees.flatMap((entree) =>
+              Array(entree.quantity).fill(entree.name)
+            ),
+            ...item.sides,
+          ]);
+      }
+      if (item.appetizer) {
+        return Array(item.quantity).fill([item.appetizer]);
+      }
+      if (item.drink) {
+        return Array(item.quantity).fill([item.drink]);
+      }
+      return [];
+    });
+
+    const prices = order.flatMap((item) =>
+      Array(item.quantity).fill(item.price)
+    );
+
+    const payload = {
+      employee_name: selectedEmployee,
+      customer_name: customerName,
+      total_price: order.reduce((sum, item) => sum + item.price * item.quantity, 0),
+      prices: prices,
+      sub_items: subItems,
+    };
+
+    try {
+      const response = await axios.post(
+        "https://project-3-team-3c.onrender.com/orders/place-order",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast({ title: "Order placed successfully!", status: "success", duration: 3000 });
+      setOrder([]);
+      setCustomerName("");
+      setSelectedEmployee("");
+    } catch (error) {
+      toast({ title: "Failed to place order.", status: "error", duration: 3000 });
+      console.error("Order placement failed:", error);
+    }
+  };
+
   return (
     <Box position="relative" fontSize="xl" pt="5vh">
       <Box position="absolute" top="10px" left="10px">
@@ -152,12 +266,32 @@ export default function Page() {
 
       <Flex direction="row" justify="normal" align="flex-start">
         <Box textAlign="center" width="30%" padding={10}>
+          <Select
+            placeholder="Select Employee"
+            value={selectedEmployee}
+            onChange={(e) => setSelectedEmployee(e.target.value)}
+            mb={4}
+          >
+            {employees.map((employee) => (
+              <option key={employee.employee_name} value={employee.employee_name}>
+                {employee.employee_name}
+              </option>
+            ))}
+          </Select>
+
+          <Input
+            placeholder="Enter Customer Name"
+            value={customerName}
+            onChange={(e) => setCustomerName(e.target.value)}
+            mb={4}
+          />
+
           <CurrentItemDisplay currentItem={currentItem} />
           <OrderDisplay order={order} onRemoveFromOrder={handleRemoveFromOrder} />
         </Box>
 
         <Box textAlign="center" width="65%" pt="5vh">
-          <Grid templateColumns="repeat(3, 1fr)" gap="1">
+          <Grid templateColumns="repeat(4, 1fr)" gap="3">
             <GridItem>
               <TypeSelector type={type} onTypeChange={handleTypeChange} />
             </GridItem>
@@ -171,6 +305,11 @@ export default function Page() {
                 Reset Item
               </Button>
             </GridItem>
+            <GridItem>
+              <Button colorScheme="blue" onClick={handleSubmitOrder}>
+                Submit Order
+              </Button>
+            </GridItem>
           </Grid>
           <Menu
             type={type}
@@ -179,11 +318,9 @@ export default function Page() {
                 handleSelectEntree(item.name);
               } else if (item.item_type === "side") {
                 handleSelectSide(item.name);
-              }
-              else if (item.item_type === "drink") {
+              } else if (item.item_type === "drink") {
                 handleSelectDrink(item.name);
-              }
-              else if (item.item_type === "appetizer") {
+              } else if (item.item_type === "appetizer") {
                 handleSelectAppetizer(item.name);
               }
             }}
