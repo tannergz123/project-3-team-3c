@@ -17,7 +17,7 @@ def get_employees():
     try:
         #initialize a cursor and execute a query
         cur = conn.cursor()
-        cur.execute('SELECT employee_name, hourly_salary, active_employee FROM employees;')
+        cur.execute("SELECT employee_name, hourly_salary, active_employee FROM employees WHERE employee_name != 'CUSTOMER_KIOSK';")
 
         #get output
         rows = cur.fetchall()
@@ -135,6 +135,8 @@ def fire_employees():
         # Ensure parameters are provided
         if employee_name is None:
             return jsonify({ "status": "error", "message": "An employee name needs to be provided." }), 400
+        if employee_name is "CUSTOMER_KIOSK":
+            return jsonify({ "status": "error", "message": "CUSTOMER_KIOSK employee cannot be deleted. It is a placeholder value to be used in the backend." }), 400
 
         #initialize a cursor and execute a query
         cur = conn.cursor()
