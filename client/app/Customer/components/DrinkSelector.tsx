@@ -5,22 +5,15 @@ import { RootState } from '../../store/store';
 import { setDrinkQuantity } from '../../store/slices/currentSelectionSlice';
 import ItemCard from './ItemCard';
 
-interface Drink {
-  name: string;
-  image: string;
-}
-
-// List of drink items
-const drinkList: Drink[] = [
-  { name: "Coca-Cola", image: "/menu_images/drinks/coca_cola.png" },
-  { name: "Sprite", image: "/menu_images/drinks/sprite.png" },
-  { name: "Barq's Root Beer", image: "/menu_images/drinks/barqs.png" },
-  { name: "Diet Coke", image: "/menu_images/drinks/diet-coke.png" },
-];
-
 const DrinkSelector: React.FC = () => {
   const dispatch = useDispatch();
+
+  // Selectors to get drinks from API data and the current drink quantities
+  const items = useSelector((state: RootState) => state.items.items);
   const drinkQuantities = useSelector((state: RootState) => state.currentSelection.drinks || {});
+
+  // Filter items to include only drinks
+  const drinkList = items.filter((item) => item.item_type === "Drink");
 
   return (
     <Box>
@@ -29,19 +22,23 @@ const DrinkSelector: React.FC = () => {
       </Box>
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
         {drinkList.map((drink) => {
-          const quantity = drinkQuantities[drink.name] || 0;
+          const quantity = drinkQuantities[drink.item_name] || 0;
 
           return (
             <ItemCard
-              key={drink.name}
-              item={drink}
+              key={drink.item_name}
+              item={{
+                name: drink.item_name,
+                image: `/menu_images/drinks/${drink.item_name.toLowerCase().replace(/ /g, "_")}.png`,
+                type: "Drink",
+              }}
               quantity={quantity}
               isIncrementDisabled={false} // No limit for drinks
               isDisabled={false} // Always enabled
               onIncrement={() =>
                 dispatch(
                   setDrinkQuantity({
-                    name: drink.name,
+                    name: drink.item_name,
                     quantity: quantity + 1,
                   })
                 )
@@ -49,7 +46,7 @@ const DrinkSelector: React.FC = () => {
               onDecrement={() =>
                 dispatch(
                   setDrinkQuantity({
-                    name: drink.name,
+                    name: drink.item_name,
                     quantity: Math.max(quantity - 1, 0),
                   })
                 )

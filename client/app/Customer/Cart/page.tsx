@@ -1,5 +1,4 @@
-"use client"; // Mark this as a Client Component
-
+"use client"
 import React, { useState } from "react";
 import {
   Box,
@@ -48,37 +47,100 @@ const CartPage: React.FC = () => {
     return /^[a-zA-Z\s]+$/.test(customerName); // Name must contain only letters and spaces
   };
 
-  const handlePlaceOrder = () => {
-    setHasSubmitted(true);
+const handlePlaceOrder = async () => {
+  setHasSubmitted(true);
 
-    if (!validateCustomerName()) {
+  if (!validateCustomerName()) {
+    toast({
+      title: "Invalid Name",
+      description: "Please enter a valid name with only letters.",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+    return;
+  }
+
+const subItems = cartItems.flatMap((item) => {
+  // Handle Entrees and Sides
+  if (item.entrees.length > 0 || item.sides.length > 0) {
+    return Array(item.quantity)
+      .fill(null)
+      .map(() => [
+        ...item.entrees.flatMap((entree: { name: string; quantity: number }) =>
+          Array(entree.quantity).fill(entree.name)
+        ),
+        ...item.sides, // Sides are added without repetition
+      ]);
+  }
+
+  // Handle Appetizers
+  if (item.appetizer) {
+    return Array(item.quantity).fill([item.appetizer]);
+  }
+
+  // Handle Drinks
+  if (item.drink) {
+    return Array(item.quantity).fill([item.drink]);
+  }
+
+  // Return empty array if no matching items
+  return [];
+});
+
+
+  // Prepare payload
+  const payload = {
+    customer_name: customerName,
+    total_price: parseFloat(calculateTotal()), // Ensure the price is a number
+    prices: cartItems.flatMap((item) => Array(item.quantity).fill(item.price)),
+    sub_items: subItems,
+  };
+
+  try {
+    console.log(payload)
+    console.log(cartItems)
+    const response = await fetch("https://project-3-team-3c.onrender.com/orders/place-order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (response.ok) {
       toast({
-        title: "Invalid Name",
-        description: "Please enter a valid name with only letters.",
+        title: "Order Placed!",
+        description: `Thank you, ${customerName}, your order has been placed.`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      dispatch(resetCart());
+      router.push("/Customer");
+    } else {
+      const errorData = await response.json();
+      toast({
+        title: "Order Failed",
+        description: errorData.message || "Something went wrong.",
         status: "error",
         duration: 3000,
         isClosable: true,
       });
-      return;
     }
-
-    // Handle the order placement logic here (e.g., send to backend)
+  } catch (error) {
+    console.error("Error placing order:", error);
     toast({
-      title: "Order Placed!",
-      description: `Thank you, ${customerName}, your order has been placed.`,
-      status: "success",
+      title: "Order Failed",
+      description: "Something went wrong. Please try again later.",
+      status: "error",
       duration: 3000,
       isClosable: true,
     });
+  }
+};
 
-    // Clear the cart
-    dispatch(resetCart());
-    setCustomerName("");
-    setHasSubmitted(false);
-
-    // Navigate back to the main menu
-    router.push("/Customer");
-  };
 
   return (
     <Box>
