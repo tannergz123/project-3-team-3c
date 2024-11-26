@@ -13,8 +13,6 @@ import { ITEM_REQUIREMENTS } from "./components/CurrentItemDisplay";
 
 export default function Page() {
   const [menuPrices, setMenuPrices] = useState<Record<string, number>>({});
-  const [loadingPrices, setLoadingPrices] = useState(true);
-  const [priceError, setPriceError] = useState<string | null>(null);
 
   const [order, setOrder] = useState<OrderItem[]>([]);
   const [type, setType] = useState("");
@@ -30,7 +28,6 @@ export default function Page() {
   useEffect(() => {
     const fetchMenuPrices = async () => {
       try {
-        setLoadingPrices(true);
         const response = await axios.get(
           "https://project-3-team-3c.onrender.com/menu-item-prices/get-menu-item-prices"
         );
@@ -40,10 +37,7 @@ export default function Page() {
         }, {});
         setMenuPrices(prices);
       } catch (error) {
-        setPriceError("Failed to load menu prices.");
         console.error(error);
-      } finally {
-        setLoadingPrices(false);
       }
     };
 
