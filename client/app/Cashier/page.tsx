@@ -8,7 +8,7 @@ import BackButton from "../../components/BackButton";
 import OrderDisplay from "./components/OrderDisplay";
 import TypeSelector from "./components/TypeSelector";
 import CurrentItemDisplay from "./components/CurrentItemDisplay";
-import { OrderItem } from "../types/orderTypes";
+import { OrderItem } from "../Types/orderTypes";
 import { ITEM_REQUIREMENTS } from "./components/CurrentItemDisplay";
 
 export default function Page() {
