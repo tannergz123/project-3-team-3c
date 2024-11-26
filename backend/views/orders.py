@@ -74,7 +74,7 @@ def place_order():
             employee_id = cur.fetchall()[0][0]
         else:
             #hardcoded id in the database for customer kiosk (customer placed order)
-            employee_id = 28
+            employee_id = 30
 
         #convert sub_items into sub_items_ids
         for item in range(len(sub_items)):
