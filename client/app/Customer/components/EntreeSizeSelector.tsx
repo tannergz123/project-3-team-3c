@@ -9,8 +9,8 @@ import {
   setSideQuantity,
   resetSelections,
 } from '../../store/slices/currentSelectionSlice';
-import EntreeOptions from './EntreeSizeSelector/EntreeOptions';
-import SideOptions from './EntreeSizeSelector/SideOptions';
+import EntreeOptions from './EntreeSectionComponents/EntreeOptions';
+import SideOptions from './EntreeSectionComponents/SideOptions';
 import { ITEM_REQUIREMENTS } from '../../Cashier/components/CurrentItemDisplay';
 
 const entreeSizes = ["Bowl", "Plate", "Bigger Plate", "A La Carte"];
@@ -86,8 +86,12 @@ const EntreeSizeSelector: React.FC = () => {
               )}
 
               <Box>
-                <Text fontSize="lg" fontWeight="bold" color="gray.700" mb={2}>Entrees</Text>
-                <EntreeOptions/>
+                <Box>
+                  <Text fontSize="lg" fontWeight="bold" color="gray.700" mb={2}>
+                    Entree (Select {selectedSize && ITEM_REQUIREMENTS[selectedSize]?.entrees || 1})
+                  </Text>
+                  <EntreeOptions />
+                </Box>
               </Box>
             </VStack>
           </Box>

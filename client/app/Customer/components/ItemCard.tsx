@@ -1,11 +1,11 @@
-import React from 'react';
-import { Box, Image, Text } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, AspectRatio, Text } from '@chakra-ui/react';
 import QuantityControl from './QuantityControl';
 
 interface ItemCardProps {
   item: {
     name: string;
-    image: string;
+    image?: string; // Optional image property
     type?: string;
   };
   quantity: number;
@@ -23,6 +23,8 @@ const ItemCard: React.FC<ItemCardProps> = ({
   onIncrement,
   onDecrement,
 }) => {
+  const [imageError, setImageError] = useState(false);
+
   const isSelected = quantity > 0; // Determine if the item is selected
 
   return (
@@ -38,16 +40,17 @@ const ItemCard: React.FC<ItemCardProps> = ({
       cursor={isDisabled ? "not-allowed" : "pointer"}
       opacity={isDisabled ? 0.6 : 1} // Dim the card if disabled
     >
-      {/* Item Image */}
-      <Image
-        src={item.image}
-        alt={item.name}
-        width="100%"
-        height="auto"
-        objectFit="cover"
-        mb={2}
-        borderRadius="md"
-      />
+      {/* Fixed Aspect Ratio Container for Image */}
+      <AspectRatio ratio={1} mb={2} borderRadius="md" overflow="hidden">
+        <Box
+          as="img"
+          src={imageError ? "/static/missing-image.jpg" : item.image || "/static/missing-image.jpg"}
+          alt={item.name}
+          objectFit="contain" // Ensures the entire image is visible
+          onError={() => setImageError(true)} // Set error state on failed load
+          backgroundColor="gray.50" // Background for non-square images
+        />
+      </AspectRatio>
 
       {/* Item Name */}
       <Text fontWeight="bold" color="red.600">

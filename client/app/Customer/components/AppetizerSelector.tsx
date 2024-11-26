@@ -1,30 +1,61 @@
-// Customer/components/AppetizerSelector.tsx
-
 import React from 'react';
-import { Grid, GridItem, Text } from '@chakra-ui/react';
-
-const appetizerOptions = ["Spring Rolls", "Potstickers", "Egg Rolls", "Wontons"];
+import { Box, Text, Grid } from '@chakra-ui/react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store/store';
+import { setAppetizerQuantity } from '../../store/slices/currentSelectionSlice';
+import ItemCard from './ItemCard';
 
 const AppetizerSelector: React.FC = () => {
+  const dispatch = useDispatch();
+
+  // Selectors to get items and current appetizer quantities
+  const items = useSelector((state: RootState) => state.items.items);
+  const appetizerQuantities = useSelector((state: RootState) => state.currentSelection.appetizers);
+
+  // Filter items to only include appetizers
+  const appetizerList = items.filter((item) => item.item_type === "Appetizer");
+
   return (
-    <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-      {appetizerOptions.map((appetizer) => (
-        <GridItem
-          key={appetizer}
-          bg="white"
-          border="1px solid"
-          borderColor="gray.200"
-          borderRadius="md"
-          p={4}
-          textAlign="center"
-          boxShadow="md"
-          _hover={{ borderColor: "red.600", transform: "scale(1.05)" }}
-          transition="all 0.2s"
-        >
-          <Text fontWeight="bold" color="red.600">{appetizer}</Text>
-        </GridItem>
-      ))}
-    </Grid>
+    <Box>
+      <Box>
+        <Text fontSize="lg" fontWeight="bold" color="gray.700" mb={2}> Appetizers </Text>
+      </Box>
+      <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+        {appetizerList.map((appetizer) => {
+          const quantity = appetizerQuantities[appetizer.item_name] || 0;
+
+          return (
+            <ItemCard
+              key={appetizer.item_name}
+              item={{
+                name: appetizer.item_name,
+                image: `/menu_images/${appetizer.item_name.toLowerCase().replace(/ /g, "_")}.png`,
+                type: "Appetizer",
+              }}
+              quantity={quantity}
+              isIncrementDisabled={false} // No limit for appetizers
+              isDisabled={false} // Always enabled
+              onIncrement={() =>
+                dispatch(
+                  setAppetizerQuantity({
+                    name: appetizer.item_name,
+                    quantity: quantity + 1,
+                  })
+                )
+              }
+              onDecrement={() =>
+                dispatch(
+                  setAppetizerQuantity({
+                    name: appetizer.item_name,
+                    quantity: Math.max(quantity - 1, 0),
+                  })
+                )
+              }
+            />
+          );
+        })}
+      </Grid>
+    </Box>
   );
 };
 
