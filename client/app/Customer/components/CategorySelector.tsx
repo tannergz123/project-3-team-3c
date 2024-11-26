@@ -1,9 +1,9 @@
-import React from 'react';
-import { VStack, Box, Button } from '@chakra-ui/react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store/store';
-import { selectCategory } from '../../store/slices/categorySlice';
-import { resetSelections } from '../../store/slices/currentSelectionSlice';
+import React from "react";
+import { VStack, Box, Button, useColorModeValue, Text } from "@chakra-ui/react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store/store";
+import { selectCategory } from "../../store/slices/categorySlice";
+import { resetSelections } from "../../store/slices/currentSelectionSlice";
 
 const categories = ["Entrees", "Appetizers", "Drinks"];
 
@@ -16,34 +16,61 @@ const CategorySelector: React.FC = () => {
     dispatch(selectCategory(category)); // Update selected category
   };
 
-  return (
-    <VStack align="stretch" spacing={4} position="relative">
-      {/* Sliding Indicator */}
-      <Box
-        position="absolute"
-        left="-10px"
-        top={`${categories.indexOf(selectedCategory) * 60}px`} // Adjust based on button height
-        height="40px"
-        width="5px"
-        bg="red.600"
-        transition="top 0.3s"
-        borderRadius="full"
-      />
+  const activeBg = useColorModeValue("red.500", "red.600");
+  const activeTextColor = useColorModeValue("white", "white");
+  const hoverTextColor = useColorModeValue("black", "white"); // Contrast text color for hover
+  const tabBg = useColorModeValue("gray.50", "gray.800");
 
-      {/* Category Buttons */}
-      {categories.map((category) => (
-        <Button
-          key={category}
-          variant="ghost"
-          justifyContent="flex-start"
-          colorScheme={selectedCategory === category ? "red" : "gray"}
-          onClick={() => handleCategoryChange(category)}
-          fontWeight={selectedCategory === category ? "bold" : "normal"}
-        >
-          {category}
-        </Button>
-      ))}
-    </VStack>
+  return (
+    <Box position="relative" w="full" maxW="300px" mx="auto">
+      {/* Tab Background */}
+      <Box
+        bg={tabBg}
+        borderRight="1px solid"
+        borderColor={useColorModeValue("gray.200", "gray.700")}
+        borderRadius="md"
+        overflow="hidden"
+        py={4}
+      >
+        {/* Sliding Red Block */}
+        <Box
+          position="absolute"
+          left={0}
+          top={`${categories.indexOf(selectedCategory) * 80}px`} // Adjust based on button height and spacing
+          height="60px"
+          width="100%"
+          bg={activeBg}
+          borderRadius="md"
+          transition="top 0.3s ease"
+          zIndex={0}
+          mt = "7px"
+        />
+
+        {/* Category Buttons */}
+        <VStack align="stretch" spacing={4} position="relative" zIndex={1}>
+          {categories.map((category) => (
+            <Button
+              key={category}
+              onClick={() => handleCategoryChange(category)}
+              bg="transparent"
+              color={selectedCategory === category ? activeTextColor : hoverTextColor}
+              justifyContent="flex-start"
+              fontWeight={selectedCategory === category ? "bold" : "normal"}
+              _hover={{
+                color: hoverTextColor, // Ensure contrast when hovering
+              }}
+              _focus={{ boxShadow: "none" }}
+              height="60px"
+              fontSize="lg"
+              px={4}
+              transition="color 0.3s ease, font-weight 0.3s ease, background-color 0.3s"
+            >
+              <Text>{category}</Text>
+            </Button>
+          ))}
+        </VStack>
+      </Box>
+    </Box>
   );
 };
 
