@@ -1,41 +1,77 @@
 "use client";
 
-import { Box, Table, Tbody, Tr, Td, Text, Heading, Button, HStack } from '@chakra-ui/react';
-import { useState } from 'react';
+import {
+  Box,
+  Table,
+  Tbody,
+  Tr,
+  Td,
+  Text,
+  Heading,
+  Button,
+  HStack,
+  Spinner,
+  Alert,
+  AlertIcon,
+  Input,
+} from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+
+interface IngredientItem {
+  name: string;
+  quantity: number;
+  orderQuantity: number;
+}
 
 const InventoryManagement = () => {
-  const initialItems = [
-    { name: 'Beef', quantity: 19 },
-    { name: 'Broccoli', quantity: 237 },
-    { name: 'Chicken', quantity: 17 },
-    { name: 'Cream Cheese', quantity: 121 },
-    { name: 'Flour', quantity: 76 },
-    { name: 'Hot Sauce', quantity: 45 },
-    { name: 'Kung Pao Sauce', quantity: 29 },
-    { name: 'Noodles', quantity: 167 },
-    { name: 'Oil', quantity: 200 },
-    { name: 'Pineapple', quantity: 15 },
-    { name: 'Rice', quantity: 320 },
-    { name: 'Savory Sauce', quantity: 60 },
-    { name: 'Shrimp', quantity: 12 },
-    { name: 'Sweet Sauce', quantity: 50 },
-    { name: 'Sweet and Sour Sauce', quantity: 45 },
-    { name: 'Teriyaki Sauce', quantity: 89 },
-    { name: 'Veggie Mix', quantity: 132 },
-  ];
+  const [items, setItems] = useState<IngredientItem[]>([]);
+  const [newIngredient, setNewIngredient] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const [items, setItems] = useState(
-    initialItems.map(item => ({ ...item, orderQuantity: 0 }))
-  );
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      try {
+        const response = await fetch(
+          "https://project-3-team-3c.onrender.com/ingredients/get-ingredients",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-  const getColor = (quantity) => {
-    if (quantity > 150) return 'green.300';
-    if (quantity >= 30 && quantity <= 50) return 'yellow.300';
-    if (quantity < 20) return 'red.300';
-    return 'gray.200';
+        if (!response.ok) {
+          throw new Error("Failed to fetch ingredients.");
+        }
+
+        const data = await response.json();
+        const formattedItems = data.map((item: any) => ({
+          name: item.ingredient_name,
+          quantity: item.quantity,
+          orderQuantity: 0,
+        }));
+
+        setItems(formattedItems);
+        setLoading(false);
+      } catch (err: any) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchIngredients();
+  }, []);
+
+  const getColor = (quantity: number) => {
+    if (quantity > 150) return "green.300";
+    if (quantity >= 30 && quantity <= 50) return "yellow.300";
+    if (quantity < 20) return "red.300";
+    return "gray.200";
   };
 
-  const handleIncrement = (index) => {
+  const handleIncrement = (index: number) => {
     setItems((prevItems) =>
       prevItems.map((item, idx) =>
         idx === index ? { ...item, orderQuantity: item.orderQuantity + 50 } : item
@@ -43,31 +79,128 @@ const InventoryManagement = () => {
     );
   };
 
-  const handleDecrement = (index) => {
+  const handleDecrement = (index: number) => {
     setItems((prevItems) =>
       prevItems.map((item, idx) =>
-        idx === index ? { ...item, orderQuantity: Math.max(0, item.orderQuantity - 50) } : item
+        idx === index
+          ? { ...item, orderQuantity: Math.max(0, item.orderQuantity - 50) }
+          : item
       )
     );
   };
 
-  const handlePlaceOrder = () => {
-    const updatedItems = items.map(item => ({
-      ...item,
-      quantity: item.quantity + item.orderQuantity,
-      orderQuantity: 0
-    }));
+  const handlePlaceOrder = async () => {
+    try {
+      setLoading(true);
 
-    setItems(updatedItems);
-    alert("Order placed and inventory updated!");
+      for (const item of items) {
+        if (item.orderQuantity > 0) {
+          await fetch(
+            "https://project-3-team-3c.onrender.com/ingredients/order-ingredients",
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                ingredient_name: item.name,
+                quantity: item.orderQuantity,
+              }),
+            }
+          );
+        }
+      }
+
+      const updatedItems = items.map((item) => ({
+        ...item,
+        quantity: item.quantity + item.orderQuantity,
+        orderQuantity: 0,
+      }));
+
+      setItems(updatedItems);
+      setLoading(false);
+      alert("Order placed and inventory updated!");
+    } catch (err: any) {
+      setError(err.message);
+      setLoading(false);
+    }
   };
+
+  const handleAddIngredient = async () => {
+    if (!newIngredient.trim()) {
+      alert("Ingredient name cannot be empty.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "https://project-3-team-3c.onrender.com/ingredients/add-ingredients",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ingredient_name: newIngredient.trim(),
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to add ingredient.");
+      }
+
+      setItems((prevItems) => [
+        ...prevItems,
+        { name: newIngredient.trim(), quantity: 0, orderQuantity: 0 },
+      ]);
+      setNewIngredient("");
+      setLoading(false);
+      alert("Ingredient added successfully!");
+    } catch (err: any) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Box p={4}>
+        <Spinner />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box p={4}>
+        <Alert status="error">
+          <AlertIcon />
+          {error}
+        </Alert>
+      </Box>
+    );
+  }
 
   return (
     <Box borderWidth="1px" borderRadius="lg" p={4} maxH="500px" overflowY="auto">
       <Heading as="h2" size="md" mb={4}>
         Inventory Management
       </Heading>
-      
+
+      <HStack spacing={4} mb={4}>
+        <Input
+          placeholder="New ingredient name"
+          value={newIngredient}
+          onChange={(e) => setNewIngredient(e.target.value)}
+        />
+        <Button size="md" colorScheme="blue" onClick={handleAddIngredient}>
+          Add Ingredient
+        </Button>
+      </HStack>
+
       <Button size="md" colorScheme="orange" mb={4} onClick={handlePlaceOrder}>
         Place Order
       </Button>
@@ -77,14 +210,23 @@ const InventoryManagement = () => {
           {items.map((item, index) => (
             <Tr key={index}>
               <Td width="40%">{item.name}</Td>
-              <Td width="20%" bg={getColor(item.quantity)} borderRadius="md" textAlign="center">
+              <Td
+                width="20%"
+                bg={getColor(item.quantity)}
+                borderRadius="md"
+                textAlign="center"
+              >
                 {item.quantity}
               </Td>
               <Td width="40%">
                 <HStack spacing={2}>
-                  <Button size="sm" onClick={() => handleDecrement(index)}>-</Button>
+                  <Button size="sm" onClick={() => handleDecrement(index)}>
+                    -
+                  </Button>
                   <Text>{item.orderQuantity}</Text>
-                  <Button size="sm" onClick={() => handleIncrement(index)}>+</Button>
+                  <Button size="sm" onClick={() => handleIncrement(index)}>
+                    +
+                  </Button>
                 </HStack>
               </Td>
             </Tr>
