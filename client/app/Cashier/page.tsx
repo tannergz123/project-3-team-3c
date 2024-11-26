@@ -233,7 +233,7 @@ export default function Page() {
     };
 
     try {
-      const response = await axios.post(
+      await axios.post(
         "https://project-3-team-3c.onrender.com/orders/place-order",
         payload,
         {
