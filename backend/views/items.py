@@ -16,10 +16,10 @@ print("running items.py")
 @items.route("/get-all-items", methods=["GET"])
 def get_all_items():
     """
-    Queries the items table and returns item_name, item_type, calories, protein, calories for all active items.
+    Queries the items table and returns item_name, item_type, calories, protein for all active items.
 
     Returns:
-        JSON: A list of entries from the items table with values item_name, item_type, calories, protein, calories and protein
+        JSON: A list of entries from the items table with values item_name, item_type, calories, and protein
     """
     try:
         #initialize a cursor and execute a query
@@ -40,6 +40,38 @@ def get_all_items():
     
     except Exception as e:
         print("Error querying @ /items/get-all-items ||", e)
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+@items.route("/get-all-items-quantity", methods=["GET"])
+def get_all_items_quantity():
+    """
+    Queries the items table and returns item_name, item_type, quantity for all active items.
+
+    Returns:
+        JSON: A list of entries from the items table with values item_name, item_type, quantity
+    """
+    try:
+        #initialize a cursor and execute a query
+        cur = conn.cursor()
+        cur.execute('SELECT item_name, item_type, quantity FROM items WHERE active_item = True;')
+
+        #get output
+        rows = cur.fetchall()
+
+        #get column names 
+        column_names = [desc[0] for desc in cur.description]
+        items = [dict(zip(column_names, row)) for row in rows]
+
+        conn.commit()
+        cur.close()
+
+        return jsonify(items), 200
+    
+    except Exception as e:
+        print("Error querying @ /items/get-all-items-quantity ||", e)
         return jsonify({
             "status": "error",
             "message": str(e)
