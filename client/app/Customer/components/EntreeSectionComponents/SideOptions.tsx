@@ -1,14 +1,14 @@
-import React from 'react';
-import { Grid } from '@chakra-ui/react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../../store/store';
-import { setSideQuantity } from '../../../store/slices/currentSelectionSlice';
-import ItemCard from '../ItemCard';
-import { ITEM_REQUIREMENTS } from '../../../Cashier/components/CurrentItemDisplay';
+import React from "react";
+import { Grid } from "@chakra-ui/react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../store/store";
+import { setSideQuantity } from "../../../store/slices/currentSelectionSlice";
+import ItemCard from "../ItemCard";
+import { ITEM_REQUIREMENTS } from "../../../Cashier/components/CurrentItemDisplay";
 
 const SideOptions: React.FC = () => {
   const dispatch = useDispatch();
-  
+
   // Selectors for current selection and items from Redux
   const sideQuantities = useSelector((state: RootState) => state.currentSelection.sides);
   const selectedSize = useSelector((state: RootState) => state.currentSelection.selectedSize);
@@ -24,10 +24,17 @@ const SideOptions: React.FC = () => {
   const maxSidesReached = totalSides >= requirements.sides;
 
   return (
-    <Grid templateColumns="repeat(3, 1fr)" gap={10}>
+    <Grid
+      templateColumns={{
+        base: "repeat(2, 1fr)", // 2 columns on small screens
+        md: "repeat(3, 1fr)", // 3 columns on medium screens
+        lg: "repeat(4, 1fr)", // 4 columns on large screens
+      }}
+      gap={6}
+    >
       {sideList.map((side) => {
         const isSelected = sideQuantities[side.item_name] > 0;
-        const isDisabled = maxSidesReached && !isSelected;
+        const isDisabled = maxSidesReached && !isSelected; // Disable if max reached and not selected
         const isIncrementDisabled = maxSidesReached;
 
         return (

@@ -51,12 +51,15 @@ const EntreeSizeSelector: React.FC = () => {
 
   return (
     <Box>
-      <Text fontSize="lg" fontWeight="bold" color="gray.700" mb={4}>
-        Select a Size
-      </Text>
+      {/* Conditionally render "Select a Size" */}
+      {!selectedSize && (
+        <Text fontSize="lg" fontWeight="bold" color="gray.700" mb={4}>
+          Select a Size
+        </Text>
+      )}
 
       {!selectedSize ? (
-        <Grid templateColumns="repeat(2, 1fr)" gap={4} mb={4}>
+        <Grid templateColumns="repeat(4, 1fr)" gap={4} mb={4}>
           {entreeSizes.map((size) => (
             <GridItem
               key={size.name}
