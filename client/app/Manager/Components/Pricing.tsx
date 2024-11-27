@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   Box,
@@ -12,23 +12,21 @@ import {
   Spinner,
   Alert,
   AlertIcon,
+  TableContainer,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
-// Define the type for price items
 interface PriceItem {
   name: string;
   price: number;
 }
 
 const Pricing = () => {
-  // Explicitly type the state
   const [prices, setPrices] = useState<PriceItem[]>([]);
   const [isEditing, setIsEditing] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch initial prices from the backend
   useEffect(() => {
     const fetchPrices = async () => {
       try {
@@ -127,52 +125,54 @@ const Pricing = () => {
   }
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={4}>
+    <Box height="700px" borderWidth="1px" borderRadius="lg" p={4} display="flex" flexDirection="column">
       <Heading as="h2" size="md" mb={4}>
         Pricing
       </Heading>
 
-      <Table variant="simple">
-        <Tbody>
-          {prices.map((item, index) => (
-            <Tr key={index}>
-              <Td width="60%">{item.name}</Td>
-              <Td width="20%">
-                {isEditing === index ? (
-                  <Input
-                    type="number"
-                    value={item.price}
-                    onChange={(event) => handleInputChange(event, index)}
-                    onBlur={() => handleSave(index)}
-                    autoFocus
-                  />
-                ) : (
-                  `$${item.price.toFixed(2)}`
-                )}
-              </Td>
-              <Td width="20%">
-                {isEditing === index ? (
-                  <Button
-                    size="sm"
-                    colorScheme="green"
-                    onClick={() => handleSave(index)}
-                  >
-                    Save
-                  </Button>
-                ) : (
-                  <Button
-                    size="sm"
-                    colorScheme="blue"
-                    onClick={() => handleEdit(index)}
-                  >
-                    Edit
-                  </Button>
-                )}
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
+      <TableContainer flex="1">
+        <Table variant="simple" height="100%">
+          <Tbody>
+            {prices.map((item, index) => (
+              <Tr key={index} height="80px"> {/* Adjust height of rows */}
+                <Td fontSize="lg" width="60%">{item.name}</Td>
+                <Td fontSize="lg" width="20%">
+                  {isEditing === index ? (
+                    <Input
+                      type="number"
+                      value={item.price}
+                      onChange={(event) => handleInputChange(event, index)}
+                      onBlur={() => handleSave(index)}
+                      autoFocus
+                    />
+                  ) : (
+                    `$${item.price.toFixed(2)}`
+                  )}
+                </Td>
+                <Td width="20%">
+                  {isEditing === index ? (
+                    <Button
+                      size="md"
+                      colorScheme="green"
+                      onClick={() => handleSave(index)}
+                    >
+                      Save
+                    </Button>
+                  ) : (
+                    <Button
+                      size="md"
+                      colorScheme="blue"
+                      onClick={() => handleEdit(index)}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 };

@@ -136,7 +136,7 @@ const EmployeeManagement = () => {
   };
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={4} maxH="470px" overflowY="auto">
+    <Box borderWidth="1px" borderRadius="lg" p={4} height="700px" overflowY="auto">
       <Heading as="h2" size="md" mb={4}>
         Employee Management
       </Heading>

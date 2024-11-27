@@ -1,7 +1,15 @@
 "use client";
 
-import { Box, Text, Heading, Select, Input, Button, VStack } from '@chakra-ui/react';
-import { useState } from 'react';
+import {
+  Box,
+  Text,
+  Heading,
+  Select,
+  Input,
+  Button,
+  VStack,
+} from "@chakra-ui/react";
+import { useState } from "react";
 
 const Inquiries = () => {
   const [timeRange, setTimeRange] = useState("");
@@ -22,28 +30,51 @@ const Inquiries = () => {
       return;
     }
 
-    // Placeholder for the actual inquiry logic.
-    alert(`Inquiring for ${timeRange === "custom" ? `from ${startDate} to ${endDate}` : timeRange}`);
+    alert(
+      `Inquiring for ${
+        timeRange === "custom"
+          ? `from ${startDate} to ${endDate}`
+          : timeRange
+      }`
+    );
   };
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={4}>
+    <Box
+      height="700px"
+      borderWidth="1px"
+      borderRadius="lg"
+      p={4}
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-evenly"
+    >
       <Heading as="h2" size="md" mb={4}>
         Inquiries
       </Heading>
-      
-      <VStack spacing={2} align="start" mb={4}>
+
+      {/* Statistics Section */}
+      <VStack spacing={4} align="stretch">
         <Text>Top Selling Day: <strong>Placeholder Date</strong></Text>
         <Text>Worst Selling Day: <strong>Placeholder Date</strong></Text>
         <Text>Most Sold Item: <strong>Placeholder Item</strong></Text>
       </VStack>
 
-      <Select placeholder="Select Time Window" mb={4} value={timeRange} onChange={handleTimeRangeChange}>
-        <option value="last_week">Last Week</option>
-        <option value="last_month">Last Month</option>
-        <option value="custom">Custom Date Range</option>
-      </Select>
+      {/* Time Window Dropdown */}
+      <Box>
+        <Select
+          placeholder="Select Time Window"
+          value={timeRange}
+          onChange={handleTimeRangeChange}
+          mb={4} // Space below the dropdown
+        >
+          <option value="last_week">Last Week</option>
+          <option value="last_month">Last Month</option>
+          <option value="custom">Custom Date Range</option>
+        </Select>
+      </Box>
 
+      {/* Custom Date Range Inputs */}
       {timeRange === "custom" && (
         <VStack spacing={3} align="stretch" mb={4}>
           <Input
@@ -61,9 +92,12 @@ const Inquiries = () => {
         </VStack>
       )}
 
-      <Button colorScheme="blue" onClick={handleInquiry}>
-        Apply Filter
-      </Button>
+      {/* Apply Filter Button */}
+      <Box>
+        <Button colorScheme="blue" onClick={handleInquiry} width="100%">
+          Apply Filter
+        </Button>
+      </Box>
     </Box>
   );
 };
