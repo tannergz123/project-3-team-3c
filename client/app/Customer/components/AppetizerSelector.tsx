@@ -20,7 +20,12 @@ const AppetizerSelector: React.FC = () => {
       <Box>
         <Text fontSize="lg" fontWeight="bold" color="gray.700" mb={2}> Appetizers </Text>
       </Box>
-      <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+      <Grid       
+      templateColumns={{
+        base: "repeat(2, 1fr)", // 2 columns on small screens
+        md: "repeat(3, 1fr)", // 3 columns on medium screens
+        lg: "repeat(4, 1fr)", // 4 columns on large screens
+      }} gap={6}>
         {appetizerList.map((appetizer) => {
           const quantity = appetizerQuantities[appetizer.item_name] || 0;
 
