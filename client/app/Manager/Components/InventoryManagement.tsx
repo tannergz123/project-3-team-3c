@@ -185,7 +185,7 @@ const InventoryManagement = () => {
   }
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={4} maxH="500px" overflowY="auto">
+    <Box borderWidth="1px" borderRadius="lg" p={4} height="700px" overflowY="auto">
       <Heading as="h2" size="md" mb={4}>
         Inventory Management
       </Heading>

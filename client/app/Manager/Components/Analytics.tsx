@@ -2,7 +2,7 @@ import { Box, Text, Heading } from '@chakra-ui/react';
 
 const Analytics = () => {
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={4}>
+    <Box height="700px" borderWidth="1px" borderRadius="lg" p={4}>
       <Heading as="h2" size="md" mb={4}>
         Analytics
       </Heading>

@@ -39,7 +39,7 @@ const MenuManagement = () => {
     const fetchMenuItems = async () => {
       try {
         const response = await fetch(
-          "https://project-3-team-3c.onrender.com/items/get-all-items",
+          "https://project-3-team-3c.onrender.com/items/get-all-items-quantity",
           {
             method: "GET",
             headers: {
@@ -55,10 +55,8 @@ const MenuManagement = () => {
         const data = await response.json();
         const formattedItems = data.map((item: any) => ({
           name: item.item_name,
-          units: 0, // Default units for initial state
+          units: item.quantity,
           itemType: item.item_type,
-          calories: item.calories,
-          protein: item.protein,
         }));
 
         setMenuItems(formattedItems);
@@ -183,7 +181,7 @@ const MenuManagement = () => {
   }
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={4} maxH="500px" overflowY="auto">
+    <Box height="700px" borderWidth="1px" borderRadius="lg" p={4} overflowY="auto">
       <Heading as="h2" size="md" mb={4}>
         Menu Management
       </Heading>
@@ -205,7 +203,12 @@ const MenuManagement = () => {
           value={newItemIngredients}
           onChange={(e) => setNewItemIngredients(e.target.value)}
         />
-        <Button size="md" colorScheme="blue" onClick={handleAddItem}>
+        <Button
+          size="md"
+          colorScheme="blue"
+          onClick={handleAddItem}
+          minWidth="120px" // Adjust the width as needed
+        >
           Add Item
         </Button>
       </HStack>
