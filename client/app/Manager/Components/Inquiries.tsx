@@ -60,44 +60,39 @@ const Inquiries = () => {
         <Text>Most Sold Item: <strong>Placeholder Item</strong></Text>
       </VStack>
 
-      {/* Time Window Dropdown */}
-      <Box>
+      {/*ime Window Dropdown and Button*/}
+      <VStack spacing={4} align="stretch" mb={4}>
         <Select
           placeholder="Select Time Window"
           value={timeRange}
           onChange={handleTimeRangeChange}
-          mb={4} // Space below the dropdown
         >
           <option value="last_week">Last Week</option>
           <option value="last_month">Last Month</option>
           <option value="custom">Custom Date Range</option>
         </Select>
-      </Box>
 
-      {/* Custom Date Range Inputs */}
-      {timeRange === "custom" && (
-        <VStack spacing={3} align="stretch" mb={4}>
-          <Input
-            placeholder="Start Date (YYYY-MM-DD)"
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-          <Input
-            placeholder="End Date (YYYY-MM-DD)"
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-        </VStack>
-      )}
+        {timeRange === "custom" && (
+          <VStack spacing={3} align="stretch">
+            <Input
+              placeholder="Start Date (YYYY-MM-DD)"
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+            <Input
+              placeholder="End Date (YYYY-MM-DD)"
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </VStack>
+        )}
 
-      {/* Apply Filter Button */}
-      <Box>
         <Button colorScheme="blue" onClick={handleInquiry} width="100%">
           Apply Filter
         </Button>
-      </Box>
+      </VStack>
     </Box>
   );
 };
