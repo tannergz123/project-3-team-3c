@@ -10,8 +10,10 @@ print("auth.py")
 @auth.route("/get-scope", methods=["GET"])
 def get_scope():
     try:
-        data = request.get_json()
-        token = data.get('token')
+        token = request.args.get('token')
+        
+        if not token:
+            return jsonify({ "status": "error", "message": "You have entered an improper JWT. This needs to be the token returned from google oAuth." }), 404
         
         decoded_payload = jwt.decode(token, options={"verify_signature": False})
         email = decoded_payload['email']
@@ -27,5 +29,5 @@ def get_scope():
         # EM : employee and manager
 
         return jsonify(access_level), 200
-    except ValueError as e:
+    except Exception as e:
         print(f"There was an issue verifying the users access level @ auth/get-scope. Error: {e}"), 500
