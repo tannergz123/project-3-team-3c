@@ -5,4 +5,3 @@ datetime
 flask-cors
 google-auth
 pyjwt
-jwt
