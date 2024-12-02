@@ -4,4 +4,5 @@ psycopg2
 datetime
 flask-cors
 google-auth
-jwt
+pyjwt
+jwy
