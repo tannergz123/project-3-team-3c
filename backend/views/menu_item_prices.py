@@ -4,7 +4,41 @@ from ..connection import conn
 menu_item_prices = Blueprint("menu_item_prices", __name__)
 
 #debugging 
-print("running menu_item_prices.py")
+print("running menu_items.py")
+
+@menu_item_prices.route("/get-menu-items", methods=['GET'])
+def get_menu_items():
+    """
+    Queries the menu_item_prices and returns all information.
+
+    Returns:
+        JSON: A list of all menu items and their prices and values menu_item_name, menu_item_price.
+    """
+
+    try:
+        #initialize a cursor and execute a query
+        cur = conn.cursor()
+        cur.execute('SELECT menu_item_name, menu_item_price, menu_item_description FROM menu_item_prices;')
+        
+        #get output
+        rows = cur.fetchall()
+
+        #get column names 
+        column_names = [desc[0] for desc in cur.description]
+        items = [dict(zip(column_names, row)) for row in rows]
+        
+        #close cursor
+        conn.commit()
+        cur.close()
+
+        return jsonify(items), 200
+    
+    except Exception as e:
+        print("Error querying @ /menu_item_prices/get-menu-items ||", e)
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
 @menu_item_prices.route("/get-menu-item-prices", methods=['GET'])
 def get_menu_item_prices():
