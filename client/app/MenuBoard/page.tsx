@@ -17,6 +17,7 @@ import {
   Divider
 } from "@chakra-ui/react";
 import BackButton from "../../components/BackButton";
+import { menu } from "framer-motion/client";
 
 // axios 
 
@@ -37,46 +38,14 @@ type ComboOption = {
 };
 
 // Menu options data
-var combos: ComboOption[] = [
-  { name: "Bowl", price: 7.99, details: "Includes 1 entrée and 1 side" },
-  { name: "Plate", price: 9.99, details: "Includes 2 entrées and 1 side" },
-  { name: "Bigger Plate", price: 11.99, details: "Includes 3 entrées and 1 side" },
+/* var combos: ComboOption[] = [
+  { name: "Bowl", price: 7.00, details: "Includes 1 entrée and 1 side" },
+  { name: "Plate", price: 9.00, details: "Includes 2 entrées and 1 side" },
+  { name: "Bigger Plate", price: 10.50, details: "Includes 3 entrées and 1 side" },
   { name: "Appetizer", price: 3.50, details: "1 serving of appetizer"},
-  { name: "a la Carte", price: 4.40, details: "1 serving of side or entrée"},
-  { name: "Drink", price: 2.10, details: "" }
-];
-
-// Sides data
-/* var sides: MenuItem[] = [
-  { name: "Chow Mein", image: "/menu_images/side/chow_mein.png" },
-  { name: "Fried Rice", image: "/menu_images/side/fried_rice.png" },
-  { name: "White Steamed Rice", image: "/menu_images/side/white_rice.png" },
-  { name: "Super Greens", image: "/menu_images/side/super_greens.png" }
+  { name: "a la Carte", price: 3.40, details: "1 serving of side or entrée"},
+  { name: "Drink", price: 2.50, details: "" }
 ]; */
-
-// Entrees data
-/* var entrees: MenuItem[] = [
-  { name: "Orange Chicken", image: "/menu_images/entree/orange_chicken.png" },
-  { name: "Beijing Beef", image: "/menu_images/entree/beijing_beef.png" },
-  { name: "Broccoli Beef", image: "/menu_images/entree/broccoli_beef.png" },
-  { name: "Honey Walnut Shrimp", image: "/menu_images/entree/hw_shrimp.png" },
-  { name: "Honey Sesame Chicken Breast", image: "/menu_images/entree/honey_sesame.png" },
-  { name: "Mushroom Chicken", image: "/menu_images/entree/mushroom_chicken.png" },
-  { name: "SweetFire Chicken Breast", image: "/menu_images/entree/sf_chicken.png" },
-  { name: "Teriyaki Chicken", image: "/menu_images/entree/teriyaki_chicken.png" },
-  { name: "Kung Pao Chicken", image: "/menu_images/entree/kp_chicken.png" },
-  { name: "Black Pepper Sirloin Steak", image: "/menu_images/entree/bp_steak.png" },
-  { name: "Black Pepper Chicken", image: "/menu_images/entree/bp_chicken.png" },
-  { name: "String Bean Chicken Breast", image: "/menu_images/entree/sb_chicken.png" }
-]; */
-
-// Appetizers data
-/* var appetizers: MenuItem[] = [
-  { name: "Chicken Egg Roll", image: "/menu_images/appetizer/chicken_egg_roll.avif" },
-  { name: "Cream Cheese Rangoon", image: "/menu_images/appetizer/cream_cheese_rangoon.avif" },
-  { name: "Apple Pie Roll", image: "/menu_images/appetizer/apple_pie_roll.avif" },
-  { name: "Veggie Spring Roll", image: "/menu_images/appetizer/veggie_spring_roll.avif" }
-] */
 
 // Main MenuBoard Component
 const MenuBoard: React.FC = () => {
@@ -84,8 +53,10 @@ const MenuBoard: React.FC = () => {
   const [entrees, setEntrees] = useState<MenuItem[]>([]);
   const [sides, setSides] = useState<MenuItem[]>([]);
   const [appetizers, setAppetizers] = useState<MenuItem[]>([]);
+  const [combos, setCombos] = useState<ComboOption[]>([]);
 
 useEffect(() => {
+  console.log('Fetching sides, entrees, appetizers');
   // fetch
   axios
     .get('https://project-3-team-3c.onrender.com/items/get-all-items')
@@ -129,14 +100,37 @@ useEffect(() => {
       setSides(side_list);
       setAppetizers(appetizer_list);
 
-      console.log("Menu data fetched successfully");
-      console.log(entrees);
-      console.log(sides);
-      console.log(appetizers);
+      console.log("Items fetched successfully");
     })
     .catch((error) => {
-      console.error("Error fetching menu data:", error);
+      console.error("Error fetching items:", error);
     });
+  
+  console.log('Fetching menu items');
+  axios
+    .get('https://project-3-team-3c.onrender.com/menu-item-prices/get-menu-items')
+    .then((response) => {
+      const menu_items = response.data;
+      const menu_list: ComboOption[] = [];
+
+      menu_items.forEach((item: any) => {
+
+        const formattedItem = {
+          name: item.menu_item_name,
+          price: item.menu_item_price,
+          details: item.menu_item_description,
+        };
+
+        menu_list.push(formattedItem);
+      });
+
+      setCombos(menu_list);
+
+      console.log("Menu data fetched successfully");
+  })
+  .catch((error) => {
+    console.error("Error fetching menu data:", error);
+  });
 }, []);
 
   return (
@@ -157,7 +151,7 @@ useEffect(() => {
                 {combo.name}
               </Heading>
               <Text fontSize="lg" color="gray.600">
-                ${combo.price.toFixed(2)}
+                ${combo.price}
               </Text>
               <Text fontSize="sm" color="gray.500">
                 {combo.details}
