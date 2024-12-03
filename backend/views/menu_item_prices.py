@@ -7,7 +7,7 @@ menu_item_prices = Blueprint("menu_item_prices", __name__)
 print("running menu_items.py")
 
 @menu_item_prices.route("/get-menu-items", methods=['GET'])
-def get_menu_item_prices():
+def get_menu_items():
     """
     Queries the menu_item_prices and returns all information.
 
