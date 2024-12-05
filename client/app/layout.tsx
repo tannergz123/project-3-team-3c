@@ -41,7 +41,7 @@ export default function RootLayout({
           {/* Invisible Google Translate widget */}
           <div
             id="google_translate_element"
-            style={{ position: "absolute", top: 0, right: 100, visibility: "hidden" }}
+            style={{ position: "absolute", top: 0, right: 15, visibility: "hidden" }}
           ></div>
           {children}
         </Provider>
