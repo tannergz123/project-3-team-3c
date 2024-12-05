@@ -36,16 +36,6 @@ type ComboOption = {
   details: string;
 };
 
-// Menu options data
-/* var combos: ComboOption[] = [
-  { name: "Bowl", price: 7.00, details: "Includes 1 entrée and 1 side" },
-  { name: "Plate", price: 9.00, details: "Includes 2 entrées and 1 side" },
-  { name: "Bigger Plate", price: 10.50, details: "Includes 3 entrées and 1 side" },
-  { name: "Appetizer", price: 3.50, details: "1 serving of appetizer"},
-  { name: "a la Carte", price: 3.40, details: "1 serving of side or entrée"},
-  { name: "Drink", price: 2.50, details: "" }
-]; */
-
 // Main MenuBoard Component
 const MenuBoard: React.FC = () => {
 
@@ -54,83 +44,83 @@ const MenuBoard: React.FC = () => {
   const [appetizers, setAppetizers] = useState<MenuItem[]>([]);
   const [combos, setCombos] = useState<ComboOption[]>([]);
 
-useEffect(() => {
-  console.log('Fetching sides, entrees, appetizers');
-  // fetch
-  axios
-    .get('https://project-3-team-3c.onrender.com/items/get-all-items')
-    .then((response) => {
-      const items = response.data;
+  useEffect(() => {
+    console.log('Fetching sides, entrees, appetizers');
+    // fetch
+    axios
+      .get('https://project-3-team-3c.onrender.com/items/get-all-items')
+      .then((response) => {
+        const items = response.data;
 
-      // classify items into categories
-      const entree_list: MenuItem[] = [];
-      const side_list: MenuItem[] = [];
-      const appetizer_list: MenuItem[] = [];
+        // classify items into categories
+        const entree_list: MenuItem[] = [];
+        const side_list: MenuItem[] = [];
+        const appetizer_list: MenuItem[] = [];
 
-      items.forEach((item: any) => {
+        items.forEach((item: any) => {
 
-        const img_path = "/menu_images/" + item.item_name.split(' ').map(word => word.toLowerCase()).join('_') + ".png";
+          const img_path = "/menu_images/" + item.item_name.split(' ').map(word => word.toLowerCase()).join('_') + ".png";
 
-        const formattedItem = {
-          name: item.item_name,
-          calories: item.calories ? item.calories : 0,
-          protein: item.protein ? item.protein : 0,
-          type: item.item_type,
-          image: img_path ? img_path: "/menu_images/no_image.png"
-        };
+          const formattedItem = {
+            name: item.item_name,
+            calories: item.calories ? item.calories : 0,
+            protein: item.protein ? item.protein : 0,
+            type: item.item_type,
+            image: img_path ? img_path: "/menu_images/no_image.png"
+          };
 
-        switch (item.item_type) {
-          case "Entree":
-            entree_list.push(formattedItem);
-            break;
-          
-          case "Side":
-            side_list.push(formattedItem);
-            break;
-          
-          case "Appetizer":
-            appetizer_list.push(formattedItem);
-            break;
-        }
+          switch (item.item_type) {
+            case "Entree":
+              entree_list.push(formattedItem);
+              break;
+            
+            case "Side":
+              side_list.push(formattedItem);
+              break;
+            
+            case "Appetizer":
+              appetizer_list.push(formattedItem);
+              break;
+          }
+        });
+
+        // update state
+        setEntrees(entree_list);
+        setSides(side_list);
+        setAppetizers(appetizer_list);
+
+        console.log("Items fetched successfully");
+      })
+      .catch((error) => {
+        console.error("Error fetching items:", error);
       });
+    
+    console.log('Fetching menu items');
+    axios
+      .get('https://project-3-team-3c.onrender.com/menu-item-prices/get-menu-items')
+      .then((response) => {
+        const menu_items = response.data;
+        const menu_list: ComboOption[] = [];
 
-      // update state
-      setEntrees(entree_list);
-      setSides(side_list);
-      setAppetizers(appetizer_list);
+        menu_items.forEach((item: any) => {
 
-      console.log("Items fetched successfully");
+          const formattedItem = {
+            name: item.menu_item_name,
+            price: item.menu_item_price,
+            details: item.menu_item_description,
+          };
+
+          menu_list.push(formattedItem);
+        });
+
+        setCombos(menu_list);
+
+        console.log("Menu data fetched successfully");
     })
     .catch((error) => {
-      console.error("Error fetching items:", error);
+      console.error("Error fetching menu data:", error);
     });
-  
-  console.log('Fetching menu items');
-  axios
-    .get('https://project-3-team-3c.onrender.com/menu-item-prices/get-menu-items')
-    .then((response) => {
-      const menu_items = response.data;
-      const menu_list: ComboOption[] = [];
-
-      menu_items.forEach((item: any) => {
-
-        const formattedItem = {
-          name: item.menu_item_name,
-          price: item.menu_item_price,
-          details: item.menu_item_description,
-        };
-
-        menu_list.push(formattedItem);
-      });
-
-      setCombos(menu_list);
-
-      console.log("Menu data fetched successfully");
-  })
-  .catch((error) => {
-    console.error("Error fetching menu data:", error);
-  });
-}, []);
+  }, []);
 
   return (
     
