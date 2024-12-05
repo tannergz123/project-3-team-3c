@@ -136,8 +136,7 @@ def insights_report():
     - Index 5: Total sales for the month
     '''
     try:
-        data = request.get_json()
-        month = data.get('month')
+        month = int(request.args.get("month"))
 
         #validate data and convert it to the correct type
         if month is None:
