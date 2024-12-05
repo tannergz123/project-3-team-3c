@@ -17,7 +17,6 @@ import {
   Divider
 } from "@chakra-ui/react";
 import BackButton from "../../components/BackButton";
-import { menu } from "framer-motion/client";
 
 // axios 
 
