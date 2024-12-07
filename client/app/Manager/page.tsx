@@ -12,7 +12,7 @@ import EmployeeManagement from "./Components/EmployeeManagement";
 import Analytics from "./Components/Analytics";
 import InventoryManagement from "./Components/InventoryManagement";
 import MenuManagement from "./Components/MenuManagement";
-import Inquiries from "./Components/Inquiries";
+import Insights from "./Components/Insights";
 import BackButton from "../../components/BackButton";
 import Pricing from "./Components/Pricing";
 
@@ -73,7 +73,7 @@ const ManagerViewPage = () => {
                 <Analytics />
               </Box>
               <Box height="900px" overflowY="auto">
-                <Inquiries />
+                <Insights />
               </Box>
             </Grid>
           </TabPanel>
