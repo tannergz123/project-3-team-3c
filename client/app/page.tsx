@@ -74,9 +74,9 @@ export default function HomePage() {
             p={10}
             borderRadius="lg"
             boxShadow="md"
-            bg="teal.500"
+            bg="red.500"
             color="white"
-            _hover={{ bg: "teal.600" }}
+            _hover={{ bg: "red.400" }}
             textAlign="center"
             cursor="pointer"
           >
