@@ -43,7 +43,7 @@ export default function RootLayout({
       <head />
       <body>
         <Provider>
-          <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+          <GoogleOAuthProvider clientId="756839707047-igc5iknel4c28jmnqsistaqs0fbm4a1b.apps.googleusercontent.com">
             {/* Invisible Google Translate widget */}
             <div
               id="google_translate_element"
