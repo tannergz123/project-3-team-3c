@@ -59,7 +59,15 @@ const EntreeSizeSelector: React.FC = () => {
       )}
 
       {!selectedSize ? (
-        <Grid templateColumns="repeat(4, 1fr)" gap={4} mb={4}>
+          <Grid
+            templateColumns={{
+              base: "repeat(2, 1fr)", // 2 columns for small screens
+              sm: "repeat(3, 1fr)",   // 3 columns for medium screens
+              lg: "repeat(4, 1fr)",   // 4 columns for large screens
+            }}
+            gap={4}
+            mb={4}
+          >
           {entreeSizes.map((size) => (
             <GridItem
               key={size.name}
