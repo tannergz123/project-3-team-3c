@@ -14,8 +14,11 @@ import {
   HStack,
   Spacer,
   SimpleGrid,
-  Divider
+  Divider,
+  Tooltip,
+  Icon,
 } from "@chakra-ui/react";
+import { InfoIcon } from "@chakra-ui/icons";
 import BackButton from "../../components/BackButton";
 
 // axios 
@@ -28,6 +31,7 @@ type MenuItem = {
   protein?: string;
   type?: string;
   image?: string; // URL to image or StaticImageData
+  allergens: string;
 };
 
 type ComboOption = {
@@ -66,7 +70,8 @@ const MenuBoard: React.FC = () => {
             calories: item.calories ? item.calories : 0,
             protein: item.protein ? item.protein : 0,
             type: item.item_type,
-            image: img_path ? img_path: "/menu_images/no_image.png"
+            image: img_path ? img_path: "/menu_images/no_image.png",
+            allergens: item.allergens ? item.allergens : "None"
           };
 
           switch (item.item_type) {
@@ -166,7 +171,11 @@ const MenuBoard: React.FC = () => {
                     <Image width="18.75em" height="12.5em" src={side.image} alt={side.name} borderRadius="md" />
                     <Text fontWeight="bold">{side.name}</Text>
                     <HStack width="100%">
-
+                      {side.allergens !== "None" && (
+                        <Tooltip label={`Allergens: ${side.allergens}`} aria-label="Allergens info">
+                          <InfoIcon ml={2} />
+                        </Tooltip>
+                      )}
                       <Spacer />
                       <Text>Calories: {side.calories} Protein: {side.protein}</Text>
                     </HStack>
@@ -190,7 +199,11 @@ const MenuBoard: React.FC = () => {
                     <Image width="18.75vh" height="12.5vh" src={entree.image} alt={entree.name} borderRadius="md" />
                     <Text fontWeight="bold">{entree.name}</Text>
                     <HStack width="100%">
-                      
+                      {entree.allergens !== "None" && (
+                        <Tooltip label={`Allergens: ${entree.allergens}`} aria-label="Allergens info">
+                          <InfoIcon ml={2} />
+                        </Tooltip>
+                      )}
                       <Spacer />
                       <Text>Calories: {entree.calories} Protein: {entree.protein}</Text>
                     </HStack>
@@ -215,6 +228,13 @@ const MenuBoard: React.FC = () => {
               <VStack spacing={3}>
                 <Image width="18.75em" height="12.5em" src={appetizer.image} alt={appetizer.name} borderRadius="md" />
                 <Text fontWeight="bold">{appetizer.name}</Text>
+                <HStack width="100%">
+                      {appetizer.allergens !== "None" && (
+                        <Tooltip label={`Allergens: ${appetizer.allergens}`} aria-label="Allergens info">
+                          <InfoIcon ml={2} />
+                        </Tooltip>
+                      )}
+                    </HStack>
               </VStack>
             </GridItem>
           ))}

@@ -24,7 +24,7 @@ def get_all_items():
     try:
         #initialize a cursor and execute a query
         cur = conn.cursor()
-        cur.execute('SELECT item_name, item_type, calories, protein, calories FROM items WHERE active_item = True;')
+        cur.execute('SELECT item_name, item_type, calories, protein, calories, allergens FROM items WHERE active_item = True;')
 
         #get output
         rows = cur.fetchall()
