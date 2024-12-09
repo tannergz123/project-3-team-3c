@@ -1,23 +1,56 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Button, Heading, VStack, Text, Alert, AlertIcon } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Heading,
+  VStack,
+  Text,
+  Alert,
+  AlertIcon,
+  Spinner,
+} from "@chakra-ui/react";
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
-  const [signInError, setSignInError] = useState<string | null>(null); // State for error message
+  const [signInError, setSignInError] = useState<string | null>(null); // State for error messages
+  const [permissionLevel, setPermissionLevel] = useState<string | null>(null); // State for permission levels
+  const [loading, setLoading] = useState(false); // State for loading
   const router = useRouter();
 
-  const handleSignIn = () => {
-    // Simulate sign-in logic
-    const success = true; // Replace with actual authentication logic
+  const fetchScopeData = async (token: string) => {
+    setLoading(true);
+    setSignInError(null); // Clear previous errors
+    try {
+      const response = await axios.get(
+        "https://project-3-team-3c.onrender.com/auth/get-scope",
+        { params: { token } }
+      );
 
-    if (!success) {
-      setSignInError("Invalid Account. Please try again."); // Set error message
-    } else {
-      setSignInError(null); // Clear error on successful sign-in
-      router.push("/Cashier"); // Redirect on success
+      const role = response.data;
+      if (role === "E") {
+        setPermissionLevel("Employee");
+      } else if (role === "EM") {
+        setPermissionLevel("Master");
+      } else if (role === "M") {
+        setPermissionLevel("Manager");
+      } else {
+        throw new Error("Unexpected role response");
+      }
+    } catch (error) {
+      console.error("Error fetching permission level:", error);
+      setSignInError("Failed to fetch permission level. Please try again.");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleSignIn = (credentialResponse: any) => {
+    const token = credentialResponse.credential; // Get ID token from Google
+    fetchScopeData(token);
   };
 
   return (
@@ -60,19 +93,35 @@ export default function SignInPage() {
           </Alert>
         )}
 
+        {/* Google Login Button */}
         <VStack spacing={4}>
-          <Button
-            colorScheme="red"
-            bg="red.600"
-            size="lg"
-            w="full"
-            _hover={{ bg: "red.500" }}
-            onClick={handleSignIn}
-          >
-            Sign In
-          </Button>
+          <GoogleLogin
+            onSuccess={handleSignIn}
+            onError={() => setSignInError("Login failed. Please try again.")}
+          />
         </VStack>
 
+        {/* Display Permission Level or Loading Spinner */}
+        <Box mt={6}>
+          {loading ? (
+            <Spinner size="lg" />
+          ) : permissionLevel ? (
+            <Text fontSize="lg" color="green.600">
+              Permission Level: {permissionLevel}
+            </Text>
+          ) : null}
+        </Box>
+
+        {/* Redirect Button (if permission is fetched successfully) */}
+        {permissionLevel && (
+          <Button
+            mt={4}
+            colorScheme="red"
+            onClick={() => router.push("/Cashier")}
+          >
+            Proceed to Dashboard
+          </Button>
+        )}
       </Box>
     </Box>
   );
