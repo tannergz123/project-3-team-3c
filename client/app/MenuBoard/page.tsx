@@ -46,7 +46,6 @@ const MenuBoard: React.FC = () => {
   const [sides, setSides] = useState<MenuItem[]>([]);
   const [appetizers, setAppetizers] = useState<MenuItem[]>([]);
   const [combos, setCombos] = useState<ComboOption[]>([]);
-  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     console.log('Fetching sides, entrees, appetizers');
