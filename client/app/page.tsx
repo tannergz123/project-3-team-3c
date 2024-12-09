@@ -5,8 +5,6 @@ import { Box, Heading, Grid, Text, Image, Flex, VStack } from "@chakra-ui/react"
 import OpenWeatherMap from 'openweathermap-ts';
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import { error } from "console";
-import { get } from "http";
 
 
 export default function HomePage() {
