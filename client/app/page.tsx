@@ -5,8 +5,6 @@ import { Box, Heading, Grid, Text, Image, Flex, VStack } from "@chakra-ui/react"
 import OpenWeatherMap from 'openweathermap-ts';
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import { error } from "console";
-import { get } from "http";
 
 
 export default function HomePage() {
@@ -16,11 +14,10 @@ export default function HomePage() {
 
   // Array of navigation items
   const navItems = [
-    { title: "Cashier", path: "/Cashier" },
+    { title: "Cashier", path: "/CashierSignIn" },
     { title: "Customer", path: "/Customer" },
-    { title: "Manager", path: "/Manager" },
+    { title: "Manager", path: "/ManagerSignIn" },
     { title: "Menu Board", path: "/MenuBoard" },
-    { title: "Sign In", path: "/SignIn" },
   ];
 
   // location and weather

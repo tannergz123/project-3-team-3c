@@ -21,9 +21,7 @@ const theme = extendTheme({
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ReduxProvider store={store}>
-      <ChakraProvider theme={theme}>
-        {children}
-      </ChakraProvider>
+      <ChakraProvider theme={theme}>{children}</ChakraProvider>
     </ReduxProvider>
   );
 }

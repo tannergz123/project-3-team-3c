@@ -7,12 +7,15 @@ import {
   Select,
   Button,
   VStack,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { useState } from "react";
 
 const Insights = () => {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [reportData, setReportData] = useState(null);
+  const [xReportData, setXReportData] = useState<Record<string, number> | null>(null);
+  const [zReportData, setZReportData] = useState<number | null>(null);
 
   const monthToNumber = {
     January: 1,
@@ -62,14 +65,54 @@ const Insights = () => {
     }
   };
 
+  const fetchXReport = async () => {
+    try {
+      const response = await fetch(`https://project-3-team-3c.onrender.com/reports/x-report`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch X report.");
+      }
+
+      const data = await response.json();
+      setXReportData(data);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const fetchZReport = async () => {
+    try {
+      const response = await fetch(`https://project-3-team-3c.onrender.com/reports/z-report`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch Z report.");
+      }
+
+      const data = await response.json();
+      setZReportData(data);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   return (
-    <Box height="700px" borderWidth="1px" borderRadius="lg" p={4}>
-      <Heading as="h2" size="md" mb={24}>
+    <Box height="700px" borderWidth="1px" borderRadius="lg" p={4} overflowY="auto">
+      <Heading as="h2" size="md" mb={6}>
         Insights
       </Heading>
 
-      {/* Statistics Section */}
-      <VStack spacing={4} align="stretch" mb={40}>
+      {/* Insights Report Section */}
+      <VStack spacing={4} align="stretch" mb={6}>
         <Text>
           Top Selling Day: <strong>{reportData?.["Top selling day"] || "--"}</strong>
         </Text>
@@ -114,6 +157,42 @@ const Insights = () => {
         <Button colorScheme="blue" onClick={handleInquiry} width="100%">
           Apply Filter
         </Button>
+      </VStack>
+
+      {/* X Report Section */}
+      <VStack spacing={4} align="stretch" mb={4}>
+        <Heading as="h3" size="sm">
+          X Report
+        </Heading>
+        {xReportData ? (
+          <SimpleGrid columns={2} spacing={4}>
+            {Object.entries(xReportData).map(([hour, sales]) => (
+              <Text key={hour}>
+                {hour}: <strong>{sales}</strong>
+              </Text>
+            ))}
+          </SimpleGrid>
+        ) : (
+          <Button colorScheme="blue" onClick={fetchXReport} width="100%">
+            Fetch X Report
+          </Button>
+        )}
+      </VStack>
+
+      {/* Z Report Section */}
+      <VStack spacing={4} align="stretch">
+        <Heading as="h3" size="sm">
+          Z Report
+        </Heading>
+        {zReportData !== null ? (
+          <Text>
+            Total Sales for the Day: <strong>{zReportData}</strong>
+          </Text>
+        ) : (
+          <Button colorScheme="blue" onClick={fetchZReport} width="100%">
+            Fetch Z Report
+          </Button>
+        )}
       </VStack>
     </Box>
   );

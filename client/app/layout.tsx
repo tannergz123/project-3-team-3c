@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { Inter } from "next/font/google";
 import Provider from "./provider";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,7 +20,11 @@ export default function RootLayout({
       // Define the Google Translate initialization function globally
       (window as any).googleTranslateElementInit = () => {
         new (window as any).google.translate.TranslateElement(
-          { pageLanguage: "en", layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE },
+          {
+            pageLanguage: "en",
+            layout: (window as any).google.translate.TranslateElement
+              .InlineLayout.SIMPLE,
+          },
           "google_translate_element"
         );
       };
@@ -38,12 +43,19 @@ export default function RootLayout({
       <head />
       <body>
         <Provider>
-          {/* Invisible Google Translate widget */}
-          <div
-            id="google_translate_element"
-            style={{ position: "absolute", top: 0, right: 15, visibility: "hidden" }}
-          ></div>
-          {children}
+          <GoogleOAuthProvider clientId="756839707047-igc5iknel4c28jmnqsistaqs0fbm4a1b.apps.googleusercontent.com">
+            {/* Invisible Google Translate widget */}
+            <div
+              id="google_translate_element"
+              style={{
+                position: "absolute",
+                top: 0,
+                right: 15,
+                visibility: "hidden",
+              }}
+            ></div>
+            {children}
+          </GoogleOAuthProvider>
         </Provider>
       </body>
     </html>

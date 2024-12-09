@@ -73,17 +73,14 @@ const Analytics = () => {
         ? { start_date: "2024-11-01", end_date: "2024-11-30" } // Example hardcoded last month
         : { start_date: startDate, end_date: endDate };
 
-    console.log("Request payload:", JSON.stringify(range)); // Debug the payload
-
     setLoading(true);
 
     try {
       const salesResponse = await fetch(
-        "https://project-3-team-3c.onrender.com/reports/sales-report",
+        `https://project-3-team-3c.onrender.com/reports/sales-report?start_date=${range.start_date}&end_date=${range.end_date}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(range),
         }
       );
 
@@ -95,11 +92,10 @@ const Analytics = () => {
       const sales = await salesResponse.json();
 
       const usageResponse = await fetch(
-        "https://project-3-team-3c.onrender.com/reports/product-usage-map",
+        `https://project-3-team-3c.onrender.com/reports/product-usage-map?start_date=${range.start_date}&end_date=${range.end_date}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(range),
         }
       );
 
@@ -148,8 +144,14 @@ const Analytics = () => {
   };
 
   return (
-    <Box height="700px" borderWidth="1px" borderRadius="lg" p={4}>
-      <Heading as="h2" size="md" mb={10}>
+    <Box
+      height="700px"
+      borderWidth="1px"
+      borderRadius="lg"
+      p={4}
+      overflowY="auto" // Add this line
+    >
+      <Heading as="h2" size="md" mb={4}>
         Analytics
       </Heading>
 
@@ -158,7 +160,7 @@ const Analytics = () => {
       ) : (
         <>
           <Text mb={2}>Item Sales</Text>
-          <Box h="300px" mb={4}>
+          <Box h="300px" mb={0}>
             <Bar data={salesChartData} options={{ responsive: true }} />
           </Box>
 

@@ -16,7 +16,6 @@ import {
   SimpleGrid,
   Divider,
   Tooltip,
-  Icon,
 } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
 import BackButton from "../../components/BackButton";
@@ -47,6 +46,7 @@ const MenuBoard: React.FC = () => {
   const [sides, setSides] = useState<MenuItem[]>([]);
   const [appetizers, setAppetizers] = useState<MenuItem[]>([]);
   const [combos, setCombos] = useState<ComboOption[]>([]);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     console.log('Fetching sides, entrees, appetizers');
@@ -168,7 +168,16 @@ const MenuBoard: React.FC = () => {
               {sides.map((side, index) => (
                 <GridItem key={index} p={4} borderWidth="4px" borderRadius="md" boxShadow="md" borderColor="gold" bg="white">
                   <VStack spacing={3}>
-                    <Image width="18.75em" height="12.5em" src={side.image} alt={side.name} borderRadius="md" />
+                    <Image
+                        width="18.75vh"
+                        height="12.5vh"
+                        src={side.image}
+                        alt={side.name}
+                        objectFit="contain"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = "/static/missing-image.jpg";
+                        }}
+                      />
                     <Text fontWeight="bold">{side.name}</Text>
                     <HStack width="100%">
                       {side.allergens !== "None" && (
@@ -196,7 +205,18 @@ const MenuBoard: React.FC = () => {
               {entrees.map((entree, index) => (
                 <GridItem key={index} p={4} borderWidth="4px" borderRadius="md" boxShadow="md" borderColor="gold" bg="white">
                   <VStack spacing={3}>
-                    <Image width="18.75vh" height="12.5vh" src={entree.image} alt={entree.name} borderRadius="md" />
+                    {/* <Image width="18.75vh" height="12.5vh" src={entree.image} alt={entree.name} borderRadius="md" /> */}
+                    <Image
+                        /* as="img" */
+                        width="18.75vh"
+                        height="12.5vh"
+                        src={entree.image}
+                        alt={entree.name}
+                        objectFit="contain"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = "/static/missing-image.jpg";
+                        }}
+                      />
                     <Text fontWeight="bold">{entree.name}</Text>
                     <HStack width="100%">
                       {entree.allergens !== "None" && (
@@ -226,7 +246,16 @@ const MenuBoard: React.FC = () => {
           {appetizers.map((appetizer, index) => (
             <GridItem key={index} p={4} borderWidth="4px" borderRadius="md" boxShadow="md" borderColor="gold" bg="white">
               <VStack spacing={3}>
-                <Image width="18.75em" height="12.5em" src={appetizer.image} alt={appetizer.name} borderRadius="md" />
+                <Image
+                  width="18.75vh"
+                  height="12.5vh"
+                  src={appetizer.image}
+                  alt={appetizer.name}
+                  objectFit="contain"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = "/static/missing-image.jpg";
+                  }}
+                />
                 <Text fontWeight="bold">{appetizer.name}</Text>
                 <HStack width="100%">
                       {appetizer.allergens !== "None" && (
