@@ -113,7 +113,7 @@ export default function SignInPage() {
         </Box>
 
         {/* Redirect Button (if permission is fetched successfully) */}
-        {(permissionLevel == "M" || permissionLevel == "EM") && (
+        {(permissionLevel == "Employee" || permissionLevel == "Master") && (
           <Button
             mt={4}
             colorScheme="red"
