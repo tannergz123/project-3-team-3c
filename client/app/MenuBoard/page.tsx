@@ -16,8 +16,6 @@ import {
   SimpleGrid,
   Divider,
   Tooltip,
-  Icon,
-  AspectRatio
 } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
 import BackButton from "../../components/BackButton";
