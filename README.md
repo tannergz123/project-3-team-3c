@@ -7,6 +7,36 @@ Ashwin
 ## Link
 https://project-3-team-3c.vercel.app/  
 
+Getting Started
+
+Clone the repository:
+
+git clone <repository-url>
+
+Install dependencies:
+
+For the client:
+
+cd client
+npm install
+
+For the backend:
+
+cd backend
+npm install
+
+Run the project:
+
+Start the client:
+
+npm run dev
+
+Start the backend:
+
+npm start
+
+
+
 ## Backend Organization and Overview
 ```
 project-3-team-3c/  
