@@ -1,8 +1,9 @@
 // MenuBoard.tsx
 "use client";
 
+// all imports used
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "axios"; // for api calls
 import {
   Box,
   Heading,
@@ -20,8 +21,6 @@ import {
 import { InfoIcon } from "@chakra-ui/icons";
 import BackButton from "../../components/BackButton";
 
-// axios 
-
 
 // Types for menu items
 type MenuItem = {
@@ -29,10 +28,11 @@ type MenuItem = {
   calories?: string;
   protein?: string;
   type?: string;
-  image?: string; // URL to image or StaticImageData
+  image?: string; // image path
   allergens: string;
 };
 
+// Types for combos
 type ComboOption = {
   name: string;
   price: number;
@@ -42,14 +42,17 @@ type ComboOption = {
 // Main MenuBoard Component
 const MenuBoard: React.FC = () => {
 
+  // Create state variables for menu items and combos
   const [entrees, setEntrees] = useState<MenuItem[]>([]);
   const [sides, setSides] = useState<MenuItem[]>([]);
   const [appetizers, setAppetizers] = useState<MenuItem[]>([]);
   const [combos, setCombos] = useState<ComboOption[]>([]);
 
+  // api calls to fetch menu items and combos
   useEffect(() => {
     console.log('Fetching sides, entrees, appetizers');
-    // fetch
+
+    // api call for menu items
     axios
       .get('https://project-3-team-3c.onrender.com/items/get-all-items')
       .then((response) => {
@@ -61,9 +64,11 @@ const MenuBoard: React.FC = () => {
         const appetizer_list: MenuItem[] = [];
 
         items.forEach((item: any) => {
-
+          
+          // construct image path
           const img_path = "/menu_images/" + item.item_name.split(' ').map(word => word.toLowerCase()).join('_') + ".png";
-
+          
+          // format response data to match MenuItem type
           const formattedItem = {
             name: item.item_name,
             calories: item.calories ? item.calories : 0,
@@ -88,7 +93,7 @@ const MenuBoard: React.FC = () => {
           }
         });
 
-        // update state
+        // update state variables
         setEntrees(entree_list);
         setSides(side_list);
         setAppetizers(appetizer_list);
@@ -100,6 +105,8 @@ const MenuBoard: React.FC = () => {
       });
     
     console.log('Fetching menu items');
+
+    // api call for combo items
     axios
       .get('https://project-3-team-3c.onrender.com/menu-item-prices/get-menu-items')
       .then((response) => {
@@ -108,6 +115,7 @@ const MenuBoard: React.FC = () => {
 
         menu_items.forEach((item: any) => {
 
+          // format response to match ComboOption type
           const formattedItem = {
             name: item.menu_item_name,
             price: item.menu_item_price,
@@ -117,6 +125,7 @@ const MenuBoard: React.FC = () => {
           menu_list.push(formattedItem);
         });
 
+        // update state variable
         setCombos(menu_list);
 
         console.log("Menu data fetched successfully");
@@ -129,10 +138,13 @@ const MenuBoard: React.FC = () => {
   return (
     
     <Box p={6} maxW="2000em" mx="auto">
+      
+      {/* Back Button and page header */}
       <Box position="absolute" top="10px" left="10px" borderRadius="md">
         <BackButton />
       </Box>
-      {/* Combos Section */}
+
+      {/* Menu Combos Section */}
       <Heading as="h2" size="lg" mb={4} textAlign="center">
         Combo Options
       </Heading>
@@ -157,35 +169,46 @@ const MenuBoard: React.FC = () => {
       <Divider my={5} />
       
       <Grid templateColumns="1.5fr 4fr" gap={6}>
+
         {/* Sides Section */}
         <Box>
           <Heading as="h2" size="lg" mb={4} textAlign="center">
             Sides
           </Heading>
+
           <Box p={4} borderRadius="md" bg="red.600">
             <Grid templateColumns="repeat(1, 1fr)" gap={6}>
               {sides.map((side, index) => (
                 <GridItem key={index} p={4} borderWidth="4px" borderRadius="md" boxShadow="md" borderColor="gold" bg="white">
                   <VStack spacing={3}>
+
+                    {/* Item image, or null image if no image exists yet */}
                     <Image
-                        width="18.75vh"
-                        height="12.5vh"
-                        src={side.image}
-                        alt={side.name}
-                        objectFit="contain"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src = "/static/missing-image.jpg";
-                        }}
-                      />
+                      width="18.75vh"
+                      height="12.5vh"
+                      src={side.image}
+                      alt={side.name}
+                      objectFit="contain"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = "/static/missing-image.jpg";
+                      }}
+                    />
+
                     <Text fontWeight="bold">{side.name}</Text>
+
                     <HStack width="100%">
+
+                      {/* Display allergens if they exist */}
                       {side.allergens !== "None" && (
                         <Tooltip label={`Allergens: ${side.allergens}`} aria-label="Allergens info">
                           <InfoIcon ml={2} />
                         </Tooltip>
                       )}
+
                       <Spacer />
+
                       <Text>Calories: {side.calories} Protein: {side.protein}</Text>
+
                     </HStack>
                   </VStack>
                 </GridItem>
@@ -199,32 +222,40 @@ const MenuBoard: React.FC = () => {
           <Heading as="h2" size="lg" mb={4} textAlign="center">
             Entrees
           </Heading>
+
           <Box p={4} borderRadius="md" bg="red.600">
             <Grid templateColumns="repeat(4, 1fr)" gap={6}>
               {entrees.map((entree, index) => (
                 <GridItem key={index} p={4} borderWidth="4px" borderRadius="md" boxShadow="md" borderColor="gold" bg="white">
                   <VStack spacing={3}>
-                    {/* <Image width="18.75vh" height="12.5vh" src={entree.image} alt={entree.name} borderRadius="md" /> */}
+
+                    {/* Item image, or null image if no image exists yet */}
                     <Image
-                        /* as="img" */
-                        width="18.75vh"
-                        height="12.5vh"
-                        src={entree.image}
-                        alt={entree.name}
-                        objectFit="contain"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src = "/static/missing-image.jpg";
-                        }}
-                      />
+                      width="18.75vh"
+                      height="12.5vh"
+                      src={entree.image}
+                      alt={entree.name}
+                      objectFit="contain"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = "/static/missing-image.jpg";
+                      }}
+                    />
+
                     <Text fontWeight="bold">{entree.name}</Text>
+
                     <HStack width="100%">
+
+                      {/* Display allergens if they exist */}
                       {entree.allergens !== "None" && (
                         <Tooltip label={`Allergens: ${entree.allergens}`} aria-label="Allergens info">
                           <InfoIcon ml={2} />
                         </Tooltip>
                       )}
+
                       <Spacer />
+
                       <Text>Calories: {entree.calories} Protein: {entree.protein}</Text>
+
                     </HStack>
                   </VStack>
                 </GridItem>
@@ -240,11 +271,14 @@ const MenuBoard: React.FC = () => {
       <Heading as="h2" size="lg" mb={4} textAlign="center">
         Appetizers
       </Heading>
+
       <Box p={4} borderRadius="md" bg="red.600">
         <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={6}>
           {appetizers.map((appetizer, index) => (
             <GridItem key={index} p={4} borderWidth="4px" borderRadius="md" boxShadow="md" borderColor="gold" bg="white">
               <VStack spacing={3}>
+
+                {/* Item image, or null image if no image exists yet */}
                 <Image
                   width="18.75vh"
                   height="12.5vh"
@@ -255,13 +289,21 @@ const MenuBoard: React.FC = () => {
                     (e.currentTarget as HTMLImageElement).src = "/static/missing-image.jpg";
                   }}
                 />
+
                 <Text fontWeight="bold">{appetizer.name}</Text>
+
                 <HStack width="100%">
+
+                      {/* Display allergens if they exist */}
                       {appetizer.allergens !== "None" && (
                         <Tooltip label={`Allergens: ${appetizer.allergens}`} aria-label="Allergens info">
                           <InfoIcon ml={2} />
                         </Tooltip>
                       )}
+
+                      <Spacer />
+
+                      <Text>Calories: {appetizer.calories} Protein: {appetizer.protein}</Text>
                     </HStack>
               </VStack>
             </GridItem>
