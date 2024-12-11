@@ -7,33 +7,34 @@ Ashwin
 ## Link
 https://project-3-team-3c.vercel.app/  
 
-Getting Started
+### Getting Started
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   ```
+2. **Install dependencies:**
+   - For the client:
+     ```bash
+     cd client
+     npm install
+     ```
+   - For the backend:
+     ```bash
+     cd backend
+     npm install
+     ```
+3. **Run the project:**
+   - Start the client:
+     ```bash
+     npm run dev
+     ```
+   - Start the backend:
+     ```bash
+     npm start
+     ```
 
-Clone the repository:
 
-git clone <repository-url>
 
-Install dependencies:
-
-For the client:
-
-cd client
-npm install
-
-For the backend:
-
-cd backend
-npm install
-
-Run the project:
-
-Start the client:
-
-npm run dev
-
-Start the backend:
-
-npm start
 
 
 
